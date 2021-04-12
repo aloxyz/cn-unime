@@ -1,98 +1,62 @@
-#pragma once
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+union tipop{     //matrice o vettore di tipo sconosciuto
+    short int   *shortint;
+    int         *intero;
+    float       *singola;
+    double      *doppia;
+    };
+union tipos{     //scalari di tipo sconosciuto
+    short int   *shortint;
+    int         *intero;
+    float       *singola;
+    double      *doppia;
+    };
 
-int fact(int m) {
-    int x = 1; float y = 1; double z = 1;
-    for(int i = 2; i < m + 1; i++) {
-        x *= i; y *= i; z *= i;
-        printf("%d!: int: %d\t float: %.3f\tdouble: %.5lf\n", i, x, y, z);
-    }
-}
+//Operazioni di tipo short int
+//Matrici
+short int *inizializza_matrice_shortint(int size);                                              //inizializza matrice di ordine size
+short int *somma_matrici_shortint(short int A[], short int B[], int size);                      //somma due matrici A + B = C
+void stampa_matrice_shortint(short int Matrice[], int size);                                    //stampa una matrice di ordine size
+//Vettori
+short int *inizializza_array_shortint(int size);                                                //inizializza un array di ordine size
+short int prodotto_scalare_shortint(short int arrayA[], short int arrayB[], int size);          //effettua il prodotto scalare tra due vettori
+short int *prodotto_tensoriale_shortint(short int arrayA[], short int arrayB[], int size);      //effettua il prodotto tensoriale tra due vettori
+void stampa_array_shortint(short int array[], int size);                                        //stampa un array di ordine size
 
-int fact_plus(int x, float y, double z, int max) {
 
-    printf("max: %d\n-------", max);
+//Operazioni di tipo int
+//Matrici
+int *inizializza_matrice_int(int size); 
+int *somma_matrici_int(int A[], int B[], int size); 
+void stampa_matrice_int(int Matrice[], int size);
+//Vettori
+int *inizializza_array_int(int size); 
+int prodotto_scalare_int(int arrayA[], int arrayB[], int size);
+int *prodotto_tensoriale_int(int arrayA[], int arrayB[], int size); 
+void stampa_array_int(int array[], int size);
 
-    printf("\nint %d:\n\n", x);
-    while(x < max) {
-        int tmp = x;
-        for(int i = x - 1; i >= 2; i--) {
-            tmp *= i;
-        }
-        printf("%d! = %d\n", x, tmp);
-        x++;
-    }
-    printf("\nfloat %.2f:\n\n", y);
-    while(y < max) {
-        float tmp = y;
-        for(int i = y - 1; i >= 2; i--) {
-            tmp *= i;
-        }
-        printf("%.2f! = %.2f\n", y, tmp);
-        y++;
-    }
-    printf("\ndouble %.4lf:\n\n", z);
-    while(z < max) {
-        double tmp = z;
-        for(int i = z - 1; i >= 2; i--) {
-            tmp *= i;
-        }
-        printf("%.4lf! = %.4lf\n", z, tmp);
-        z++;
-    }
-}
 
-int int_sum(int *v, int n) {
-    int sum = v[0];
-    for(int i = 0; i < n; i++) { sum += v[i]; }
-    return sum;
-}
+//Operazioni di tipo float
+//Matrici
+float *inizializza_matrice_float(int size); 
+float *somma_matrici_float(float A[], float B[], int size); 
+void stampa_matrice_float(float Matrice[], int size);
+//Vettori
+float *inizializza_array_float(int size); 
+float prodotto_scalare_float(float arrayA[], float arrayB[], int size);
+float *prodotto_tensoriale_float(float arrayA[], float arrayB[], int size); 
+void stampa_array_float(float array[], int size);
 
-double double_sum(double *v, int n) {
-    double sum = v[0];
-    for(int i = 0; i < n; i++) { sum += v[i]; }
-    return sum;
-}
 
-int int_prod(int *v, int n) {
-    int prod = v[0];
-    for(int i = 0; i < n; i++) { prod *= v[i]; }
-    return prod;
-}
+//Operazioni di tipo double
+//Matrici
+double *inizializza_matrice_double(int size); 
+double *somma_matrici_double(double A[], double B[], int size); 
+void stampa_matrice_double(double Matrice[], int size);
+//Vettori
+double *inizializza_array_double(int size); 
+double prodotto_scalare_double(double arrayA[], double arrayB[], int size);
+double *prodotto_tensoriale_double(double arrayA[], double arrayB[], int size); 
+void stampa_array_double(double array[], int size);
 
-int int_avg(int *v, int n) {
-    return (int_sum(v, n)/n);
-}
 
-double double_avg(double *v, int n) {
-    return (double_sum(v, n)/n);
-}
-
-int int_min(int *v, int n) {
-    int tmp = v[0];
-    for(int i = 0; i < n; i++) {
-        if(tmp > v[i]) tmp = v[i];
-    }
-    return tmp;
-}
-
-int int_max(int *v, int n) {
-    int tmp = v[0];
-    for(int i = 0; i < n; i++) {
-        if(tmp < v[i]) tmp = v[i];
-    }
-    return tmp;
-}
-
-int int_sort(int *v, int n) {
-    int result[n];
-    int tmp = v[0];
-    for(int i = 0; i < n; i++) {
-        for(int j = 0; i < n; j++) {
-        }
-    result[i] = tmp;
-    }
-}
 
