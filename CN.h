@@ -5,10 +5,10 @@ union tipop{     //matrice o vettore di tipo sconosciuto
     double      *doppia;
     };
 union tipos{     //scalari di tipo sconosciuto
-    short int   *shortint;
-    int         *intero;
-    float       *singola;
-    double      *doppia;
+    short int   shortint;
+    int         intero;
+    float       singola;
+    double      doppia;
     };
 
 //Operazioni di tipo short int
