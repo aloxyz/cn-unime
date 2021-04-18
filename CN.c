@@ -2,20 +2,106 @@
 #include<stdlib.h>
 #include"CN.h"
 
-//SHORT INT
-short int *inizializza_matrice_shortint(int size){
-    puts("Inserire gli elementi della matrice");
-    int i,j;
-    short int *A;
-    A = malloc(sizeof(short int)*size*size);
-    for(i=0; i<size; i++){
-        for(j=0; j<size; j++)
-            scanf("%hu", A+i*size+j);
-        fflush(stdin);
-        }
-    fflush(stdin);
+//general purpose functions
+int isVector(matrix *A){
+    return ((A->rows == 1) || (A->cols == 1));
+}
+
+int isScalar(matrix *A){
+    return ((A->rows == 1) && (A->cols == 1)); 
+}
+
+int check(matrix *A, matrix *B){
+    return ((A->rows == B->cols) && (A->cols == B->cols));
+}
+
+int inner_check(matrix *A, matrix *B){
+    return (A->cols == B->rows);
+}
+
+matrix *newMatrix(int cols, int rows){
+    matrix *A = (matrix*)malloc(sizeof(matrix));
+    A->rows = rows;
+    A->cols = cols;
+    scanf("%d", &A->type); //1 = shortint, 2 = int, 3 = float, 4 = double
+    switch(A->type){
+        case shortint:
+                A->elements.shortint = (short int*)malloc(sizeof(short int)*A->rows*A->cols); 
+                for(int i=0; i< A->rows; i++)
+                    for(int j=0; i< A->cols; j++)
+                        scanf("%hd", &A->elements.shortint[i*A->cols + A->cols]);
+                break;
+
+        case integer:
+                A->elements.integer = (int*)malloc(sizeof(int)*A->rows*A->cols); 
+                for(int i=0; i< A->rows; i++)
+                    for(int j=0; i< A->cols; j++)
+                        scanf("%d", &A->elements.integer[i*A->cols + A->cols]);
+                break;
+
+        case floating:
+                A->elements.floating = (float*)malloc(sizeof(int)*A->rows*A->cols); 
+                for(int i=0; i< A->rows; i++)
+                    for(int j=0; i< A->cols; j++)
+                        scanf("%f", &A->elements.floating[i*A->cols + A->cols]);
+                break;
+
+        case chonkster:
+                A->elements.chonkster = (double*)malloc(sizeof(int)*A->rows*A->cols); 
+                for(int i=0; i< A->rows; i++)
+                    for(int j=0; i< A->cols; j++)
+                        scanf("%lf", &A->elements.chonkster[i*A->cols + A->cols]);
+                break;
+
+        default:
+            puts("Wrong code");
+    }
     return A;
 }
+
+void printMatrix(matrix *A){
+    switch(A->type){
+        case shortint:
+                for(int i = 0; i<A->rows; i++){
+                    printf("| ");
+                    for(int j = 0; j<A->cols; j++)
+                        printf("%hd", A->elements.shortint[i*A->cols + A->cols]);
+                    printf(" |");
+                }
+                break;
+
+        case integer: 
+                for(int i = 0; i<A->rows; i++){
+                    printf("| ");
+                    for(int j = 0; j<A->cols; j++)
+                        printf("%d", A->elements.integer[i*A->cols + A->cols]);
+                    printf(" |");
+                }
+                break;
+        
+        case floating:
+                for(int i = 0; i<A->rows; i++){
+                    printf("| ");
+                    for(int j = 0; j<A->cols; j++)
+                        printf("%f", A->elements.floating[i*A->cols + A->cols]);
+                    printf(" |");
+                }
+                break;
+
+        case chonkster:
+                for(int i = 0; i<A->rows; i++){
+                    printf("| ");
+                    for(int j = 0; j<A->cols; j++)
+                        printf("%lf", A->elements.chonkster[i*A->cols + A->cols]);
+                    printf(" |");
+                }
+                break;
+    }
+    
+
+}
+
+//SHORT INT
 short int *somma_matrici_shortint(short int *A, short int *B, int size){
     int i,j;
     short int *C;
@@ -26,24 +112,8 @@ short int *somma_matrici_shortint(short int *A, short int *B, int size){
             C[i*size+j] = A[i*size+j] + B[i*size+j];
     return C;
 }
-void stampa_matrice_shortint(short int A[], int size){
-    int i,j;
-    for(i=0; i<size; i++){
-        printf("|");
-        for(j=0; j<size; j++) 
-            printf("%2hu", A[i*size+j]);
-        printf("|\n");
-    }
-    printf("\n\n");
-}
-short int *inizializza_array_shortint(int size){
-    puts("Inserire gli elementi del vettore");
-    short int *a = malloc(sizeof(short int)*size);
-    for(int i=0; i<size; i++)
-        scanf("%hu", &a[i]);
-    fflush(stdin);
-    return a;
-}
+
+
 short int prodotto_scalare_shortint(short int arrayA[], short int arrayB[], int size){
     int z=0, i;
     for(i=0; i<size; i++){
@@ -62,19 +132,6 @@ short int *prodotto_tensoriale_shortint(short int arrayA[], short int arrayB[], 
 }
 
 //INT
-int *inizializza_matrice_int(int size){
-    puts("Inserire gli elementi della matrice");
-    int i,j;
-    int *A;
-    A = malloc(sizeof(int)*size*size);
-    for(i=0; i<size; i++){
-        for(j=0; j<size; j++)
-            scanf("%d", A+i*size+j);
-        fflush(stdin);
-        }
-    fflush(stdin);
-    return A;
-}
 int *somma_matrici_int(int *A, int *B, int size){
     int i,j;
     int *C;
@@ -85,24 +142,7 @@ int *somma_matrici_int(int *A, int *B, int size){
             C[i*size+j] = A[i*size+j] + B[i*size+j];
     return C;
 }
-void stampa_matrice_int(int A[], int size){
-    int i,j;
-    for(i=0; i<size; i++){
-        printf("|");
-        for(j=0; j<size; j++) 
-            printf("%2d ", A[i*size+j]);
-        printf("|\n");
-    }
-    printf("\n\n");
-}
-int *inizializza_array_int(int size){
-    puts("Inserire gli elementi dell'array");
-    int *a = malloc(sizeof(int)*size);
-    for(int i=0; i<size; i++)
-        scanf("%d", &a[i]);
-    fflush(stdin);
-    return a;
-}
+
 int prodotto_scalare_int(int arrayA[], int arrayB[], int size){
     int z=0, i;
     for(i=0; i<size; i++){
@@ -121,19 +161,6 @@ int *prodotto_tensoriale_int(int arrayA[], int arrayB[], int size){
 }
 
 //FLOAT
-float *inizializza_matrice_float(int size){
-    puts("Inserire gli elementi della matrice");
-    int i,j;
-    float *A;
-    A = malloc(sizeof(float)*size*size);
-    for(i=0; i<size; i++){
-        for(j=0; j<size; j++)
-            scanf("%f", A+i*size+j);
-        fflush(stdin);
-        }
-    fflush(stdin);
-    return A;
-}
 float *somma_matrici_float(float *A, float *B, int size){
     int i,j;
     float *C;
@@ -144,24 +171,7 @@ float *somma_matrici_float(float *A, float *B, int size){
             C[i*size+j] = A[i*size+j] + B[i*size+j];
     return C;
 }
-void stampa_matrice_float(float A[], int size){
-    int i,j;
-    for(i=0; i<size; i++){
-        printf("|");
-        for(j=0; j<size; j++) 
-            printf("%2f ", A[i*size+j]);
-        printf("|\n");
-    }
-    printf("\n\n");
-}
-float *inizializza_array_float(int size){
-    puts("Inserire gli elementi dell'array");
-    float *a = malloc(sizeof(float)*size);
-    for(int i=0; i<size; i++)
-        scanf("%f", &a[i]);
-    fflush(stdin);
-    return a;
-}
+
 float prodotto_scalare_float(float arrayA[], float arrayB[], int size){
     int z=0, i;
     for(i=0; i<size; i++){
@@ -180,19 +190,6 @@ float *prodotto_tensoriale_float(float arrayA[], float arrayB[], int size){
 }
 
 //DOUBLE
-double *inizializza_matrice_double(int size){
-    puts("Inserire gli elementi della matrice");
-    int i,j;
-    double *A;
-    A = malloc(sizeof(double)*size*size);
-    for(i=0; i<size; i++){
-        for(j=0; j<size; j++)
-            scanf("%lf", A+i*size+j);
-        fflush(stdin);
-        }
-    fflush(stdin);
-    return A;
-}
 double *somma_matrici_double(double *A, double *B, int size){
     int i,j;
     double *C;
@@ -203,24 +200,7 @@ double *somma_matrici_double(double *A, double *B, int size){
             C[i*size+j] = A[i*size+j] + B[i*size+j];
     return C;
 }
-void stampa_matrice_double(double A[], int size){
-    int i,j;
-    for(i=0; i<size; i++){
-        printf("|");
-        for(j=0; j<size; j++) 
-            printf("%2lf ", A[i*size+j]);
-        printf("|\n");
-    }
-    printf("\n\n");
-}
-double *inizializza_array_double(int size){
-    puts("Inserire gli elementi dell'array");
-    double *a = malloc(sizeof(double)*size);
-    for(int i=0; i<size; i++)
-        scanf("%lf", &a[i]);
-    fflush(stdin);
-    return a;
-}
+
 double prodotto_scalare_double(double arrayA[], double arrayB[], int size){
     int z=0, i;
     for(i=0; i<size; i++){
