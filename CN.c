@@ -1,5 +1,3 @@
-#include<stdio.h>
-#include<stdlib.h>
 #include"CN.h"
 
 //general purpose functions
@@ -19,7 +17,7 @@ int rowsColsCmp(matrix *A, matrix *B){
     return (A->cols == B->rows);
 }
 
-void initMatrix(matrix *A) {
+void initElements(matrix *A) {
     printf("\n>>\n");
     switch(A->type){
         case short_int:
@@ -68,8 +66,9 @@ void initMatrix(matrix *A) {
     }
 }
 
-matrix *newMatrix(int rows, int cols, type t){
+matrix *newMatrix(char *name, int rows, int cols, type t){
     matrix *A = (matrix*)malloc(sizeof(matrix));
+    strncpy(A->name, name, 15);
     A->rows = rows;
     A->cols = cols;
     if(t > 4 || t < 1) {
@@ -81,6 +80,7 @@ matrix *newMatrix(int rows, int cols, type t){
 }
 
 void printMatrix(matrix *A){
+    printf("%s:\n", A->name);
     switch(A->type){
         case short_int:
                 for(int i = 0; i<A->rows; i++){
@@ -124,15 +124,17 @@ void printMatrix(matrix *A){
 
 matrix *promptMatrix() {
     int rows, cols, t;
+    char name[16];
     printf("New matrix\n");
-    printf("rows and columns separated by space:\n>> ");
+    printf("Name: ");
+    scanf("%s", name);
+    printf("Rows and columns separated by space:\n>> ");
     scanf("%d%d", &rows, &cols);
     printf("\nDatatype:\n1.short_int\n2.integer\n3.floating\n4.double_prec\n>> ");
     scanf("%d", &t);
-    matrix *tmp = newMatrix(rows, cols, t);
+    matrix *tmp = newMatrix(name, rows, cols, t);
     printf("\nInsert elements:");
-    initMatrix(tmp);
-    printf("\nNew matrix:\n");
+    initElements(tmp);
     printMatrix(tmp);
     return tmp;
 

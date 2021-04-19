@@ -1,3 +1,7 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
 //type definitions
 typedef enum type {
     short_int = 1,
@@ -14,9 +18,12 @@ typedef union pointer {
     } pointer;
 
 typedef struct matrix {  
+    char name[16];
     pointer elements;
     int rows, cols;
     type type;
+
+    struct matrix *next;
     } matrix;
 
 
@@ -28,9 +35,9 @@ int rowsColsCmp(matrix *A, matrix *B);                      //returns 1 if cols 
 
 
 void printMatrix(matrix *A);                                //prints a matrix regardless of the type of its elements
-void initMatrix(matrix *A);
+void initElements(matrix *A);
 matrix *promptMatrix();                                     //prompt for a new matrix
-matrix *newMatrix(int rowN, int colN, type t);              //creates a new matrix
+matrix *newMatrix(char *name, int rows, int cols, type t);              //creates a new matrix
 
 
 //matrix operations
