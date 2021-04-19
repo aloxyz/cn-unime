@@ -2,10 +2,9 @@
 
 //get n-th 
 matrix *get_matrix(matrix *head, char *name) {
-    matrix *tmp = head;
-    while (tmp->next != NULL) {
-        if(strcmp(name, tmp->name)) return tmp;
-        tmp = tmp->next;
+    while (head != NULL) {
+        if(!strcmp(name, head->name)) return head;
+        head = head->next;
     }
     return NULL;
 }

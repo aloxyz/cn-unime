@@ -15,8 +15,9 @@ int main() {
                 break;
             case 'p':
                 printf("\nvariable name: ");
-                fgets(cc, 16, stdin);
+                scanf(" %s", cc);
                 printMatrix(get_matrix(head, cc));
+                break;
             case 'v':
                 print_list(head);
                 break;
