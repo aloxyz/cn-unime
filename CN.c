@@ -1,23 +1,23 @@
 #include"CN.h"
 
 //general purpose functions
-int isVector(matrix *A){
+int is_vector(Matrix *A){
     return ((A->rows == 1) || (A->cols == 1));
 }
 
-int isScalar(matrix *A){
+int is_scalar(Matrix *A){
     return ((A->rows == 1) && (A->cols == 1)); 
 }
 
-int sizeCmp(matrix *A, matrix *B){
+int sizecmp(Matrix *A, Matrix *B){
     return ((A->rows == B->cols) && (A->cols == B->cols));
 }
 
-int rowsColsCmp(matrix *A, matrix *B){
+int rccmp(Matrix *A, Matrix *B){
     return (A->cols == B->rows);
 }
 
-void initElements(matrix *A) {
+void init_elements(Matrix *A) {
     printf("\n>>\n");
     switch(A->type){
         case short_int:
@@ -66,8 +66,8 @@ void initElements(matrix *A) {
     }
 }
 
-matrix *newMatrix(char *name, int rows, int cols, type t){
-    matrix *A = (matrix*)malloc(sizeof(matrix));
+Matrix *new_matrix(char *name, int rows, int cols, Type t){
+    Matrix *A = (Matrix*)malloc(sizeof(Matrix));
     strncpy(A->name, name, 15);
     A->rows = rows;
     A->cols = cols;
@@ -79,7 +79,7 @@ matrix *newMatrix(char *name, int rows, int cols, type t){
     return A;
 }
 
-void printMatrix(matrix *A){
+void print_matrix(Matrix *A){
     printf("%s:\n", A->name);
     switch(A->type){
         case short_int:
@@ -122,7 +122,7 @@ void printMatrix(matrix *A){
 
 }
 
-matrix *promptMatrix() {
+Matrix *prompt_matrix() {
     int rows, cols, t;
     char name[16];
     printf("New matrix\n");
@@ -132,10 +132,10 @@ matrix *promptMatrix() {
     scanf("%d%d", &rows, &cols);
     printf("\nDatatype:\n1.short_int\n2.integer\n3.floating\n4.double_prec\n>> ");
     scanf("%d", &t);
-    matrix *tmp = newMatrix(name, rows, cols, t);
+    Matrix *tmp = new_matrix(name, rows, cols, t);
     printf("\nInsert elements:");
-    initElements(tmp);
-    printMatrix(tmp);
+    init_elements(tmp);
+    print_matrix(tmp);
     return tmp;
 
 }

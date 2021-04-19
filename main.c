@@ -1,6 +1,6 @@
 #include "lists.h"
 
-matrix *head = NULL;
+Matrix *head = NULL;
 char help_message[BUFSIZ] = "\nUsage:\nn - new matrix\np - print variables\ne - exit\nh - print this message\n";
 
 int main() {
@@ -11,12 +11,12 @@ int main() {
         scanf(" %c", &c);
         switch (c) {
             case 'n':
-                push_matrix(&head, promptMatrix());
+                push_matrix(&head, prompt_matrix());
                 break;
             case 'p':
                 printf("\nvariable name: ");
                 scanf(" %s", cc);
-                printMatrix(get_matrix(head, cc));
+                print_matrix(get_matrix(head, cc));
                 break;
             case 'v':
                 print_list(head);

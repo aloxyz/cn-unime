@@ -3,42 +3,42 @@
 #include <string.h>
 
 //type definitions
-typedef enum type {
+typedef enum Type {
     short_int = 1,
     integer,
     floating,
     double_prec
-    } type;
+    } Type;
 
-typedef union pointer {
+typedef union Pointer {
     short int   *short_int;
     int         *integer;
     float       *floating;
     double      *double_prec;
-    } pointer;
+    } Pointer;
 
-typedef struct matrix {  
+typedef struct Matrix {  
     char name[16];
-    pointer elements;
+    Pointer elements;
     int rows, cols;
-    type type;
+    Type type;
 
-    struct matrix *next;
-    } matrix;
+    struct Matrix *next;
+    } Matrix;
 
 
 //generic purpose functions
-int isVector(matrix *A);                                    //returns 1 if A is a vector (1xN or Nx1 dimension, where N is greater than 1)
-int isScalar(matrix *B);                                    //returns 1 if A is a scalar(1x1 dimension)
-int sizeCmp(matrix *A, matrix *B);                          //returns 1 if A and B are the same size
-int rowsColsCmp(matrix *A, matrix *B);                      //returns 1 if cols of A == rows of B
+int is_vector(Matrix *A);                                   //returns 1 if A is a vector (1xN or Nx1 dimension, where N is greater than 1)
+int is_scalar(Matrix *B);                                   //returns 1 if A is a scalar(1x1 dimension)
+int sizecmp(Matrix *A, Matrix *B);                          //returns 1 if A and B are the same size
+int rccmp(Matrix *A, Matrix *B);                           //returns 1 if cols of A == rows of B
 
 
-void printMatrix(matrix *A);                                //prints a matrix regardless of the type of its elements
-void initElements(matrix *A);
-matrix *promptMatrix();                                     //prompt for a new matrix
-matrix *newMatrix(char *name, int rows, int cols, type t);              //creates a new matrix
+void print_matrix(Matrix *A);                                //prints a Matrix regardless of the type of its elements
+void init_elements(Matrix *A);
+Matrix *prompt_matrix();                                     //prompt for a new matrix
+Matrix *new_matrix(char *name, int rows, int cols, Type t);  //creates a new matrix
 
 
 //matrix operations
-matrix *matrixSum(matrix *A, matrix *B);                    //sum two matrices A and B
+Matrix *matrix_sum(Matrix *A, Matrix *B);                    //sum two matrices A and B

@@ -1,7 +1,7 @@
 #include "CN.h"
 
-matrix *get_matrix(matrix *head, char *name);
-matrix *get_last(matrix *head);
-int llen(matrix *head);
-void push_matrix(matrix **head, matrix *new);
-void print_list(matrix *head);
+Matrix *get_matrix(Matrix *head, char *name);
+Matrix *get_last(Matrix *head);
+int llen(Matrix *head);
+void push_matrix(Matrix **head, Matrix *new);
+void print_list(Matrix *head);
