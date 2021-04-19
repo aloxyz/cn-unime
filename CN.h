@@ -1,19 +1,20 @@
 #define typename(x) _Generic((x), short int: 0, int:1, float:2, double:3) //macro which allows to detect the type of a variable
 
 //type definitions
-typedef enum type{shortint=1, integer, floating, chonkster}type;
-typedef union pointer{      //unknown type pointer
-    short int   *shortint;
+typedef enum type{short_int=1, integer, floating, double_prec}type;
+
+typedef union pointer{      //generic type pointer
+    short int   *short_int;
     int         *integer;
     float       *floating;
-    double      *chonkster;
+    double      *double_prec;
     }pointer;
 
-typedef union scalar{     //unknown type scalar
-    short int   shortint;
+typedef union scalar{     //generic type scalar
+    short int   short_int;
     int         integer;
     float       floating;
-    double      chonkster;
+    double      double_prec;
     }scalar;
 
 typedef struct matrix{  
@@ -23,20 +24,21 @@ typedef struct matrix{
 }matrix;
 
 //functions definitions
+
 //general purpose functions
-int isVector(matrix *A);                                    //checks if the matrix passed is an array (1xN or Nx1 dimension, where N is greater than 1)
-int isScalar(matrix *B);                                    //checks if the matrix passed is a scalar(1x1 dimension)
-int check(matrix *A, matrix *B);                            //checks whether the two matrixes have the same size
-int inner_check(matrix *A, matrix *B);                       //checks whether the two matrixes are compatible for being multiplicated 
+int isVector(matrix *A);                                    //returns 1 if A is a vector (1xN or Nx1 dimension, where N is greater than 1)
+int isScalar(matrix *B);                                    //returns 1 if A is a scalar(1x1 dimension)
+int sizeCmp(matrix *A, matrix *B);                          //returns 1 if A and B are the same size
+int rowsColsCmp(matrix *A, matrix *B);                       //returns 1 if cols of A == rows of B
 void printMatrix(matrix *A);                                //prints a matrix regardless of the type of its elements
-matrix *newMatrix();                                        //creates a new matrix
-matrix *matrixSum(matrix *A, matrix *B);
+matrix *newMatrix(int rowN, int colN, type t);                                        //creates a new matrix
+matrix *matrixSum(matrix *A, matrix *B);                    //sum two matrices A and B
 
 //short int type functions
 //matrixes
 //vectors
-scalar dotProductShortint(matrix *v, matrix *w);                          //dot product between two vector
-scalar tensorialProductShortint(matrix *v, matrix *w);                    //tensorial product between two vectors
+scalar dotProductshort_int(matrix *v, matrix *w);                          //dot product of two vector
+scalar tensorialProductshort_int(matrix *v, matrix *w);                    //tensorial product of two vectors
 
 
 //Operazioni di tipo int

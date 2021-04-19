@@ -11,25 +11,26 @@ int isScalar(matrix *A){
     return ((A->rows == 1) && (A->cols == 1)); 
 }
 
-int check(matrix *A, matrix *B){
+int sizeCmp(matrix *A, matrix *B){
     return ((A->rows == B->cols) && (A->cols == B->cols));
 }
 
-int inner_check(matrix *A, matrix *B){
+int rowsColsCmp(matrix *A, matrix *B){
     return (A->cols == B->rows);
 }
 
-matrix *newMatrix(int cols, int rows){
+matrix *newMatrix(int cols, int rows, type t){
     matrix *A = (matrix*)malloc(sizeof(matrix));
     A->rows = rows;
     A->cols = cols;
-    scanf("%d", &A->type); //1 = shortint, 2 = int, 3 = float, 4 = double
+    A->type = t;
+    //scanf("%d", &A->type); //1 = short_int, 2 = int, 3 = float, 4 = double
     switch(A->type){
-        case shortint:
-                A->elements.shortint = (short int*)malloc(sizeof(short int)*A->rows*A->cols); 
+        case short_int:
+                A->elements.short_int = (short int*)malloc(sizeof(short int)*A->rows*A->cols); 
                 for(int i=0; i< A->rows; i++)
                     for(int j=0; i< A->cols; j++)
-                        scanf("%hd", &A->elements.shortint[i*A->cols + A->cols]);
+                        scanf("%hd", &A->elements.short_int[i*A->cols + A->cols]);
                 break;
 
         case integer:
@@ -46,11 +47,11 @@ matrix *newMatrix(int cols, int rows){
                         scanf("%f", &A->elements.floating[i*A->cols + A->cols]);
                 break;
 
-        case chonkster:
-                A->elements.chonkster = (double*)malloc(sizeof(int)*A->rows*A->cols); 
+        case double_prec:
+                A->elements.double_prec = (double*)malloc(sizeof(int)*A->rows*A->cols); 
                 for(int i=0; i< A->rows; i++)
                     for(int j=0; i< A->cols; j++)
-                        scanf("%lf", &A->elements.chonkster[i*A->cols + A->cols]);
+                        scanf("%lf", &A->elements.double_prec[i*A->cols + A->cols]);
                 break;
 
         default:
@@ -61,11 +62,11 @@ matrix *newMatrix(int cols, int rows){
 
 void printMatrix(matrix *A){
     switch(A->type){
-        case shortint:
+        case short_int:
                 for(int i = 0; i<A->rows; i++){
                     printf("| ");
                     for(int j = 0; j<A->cols; j++)
-                        printf("%hd", A->elements.shortint[i*A->cols + A->cols]);
+                        printf("%hd", A->elements.short_int[i*A->cols + A->cols]);
                     printf(" |");
                 }
                 break;
@@ -88,11 +89,11 @@ void printMatrix(matrix *A){
                 }
                 break;
 
-        case chonkster:
+        case double_prec:
                 for(int i = 0; i<A->rows; i++){
                     printf("| ");
                     for(int j = 0; j<A->cols; j++)
-                        printf("%lf", A->elements.chonkster[i*A->cols + A->cols]);
+                        printf("%lf", A->elements.double_prec[i*A->cols + A->cols]);
                     printf(" |");
                 }
                 break;
@@ -102,7 +103,7 @@ void printMatrix(matrix *A){
 }
 
 //SHORT INT
-short int *somma_matrici_shortint(short int *A, short int *B, int size){
+short int *somma_matrici_short_int(short int *A, short int *B, int size){
     int i,j;
     short int *C;
 
@@ -114,14 +115,14 @@ short int *somma_matrici_shortint(short int *A, short int *B, int size){
 }
 
 
-short int prodotto_scalare_shortint(short int arrayA[], short int arrayB[], int size){
+short int prodotto_scalare_short_int(short int arrayA[], short int arrayB[], int size){
     int z=0, i;
     for(i=0; i<size; i++){
         z+= arrayA[i] * arrayB[i];
     }
     return z;
 }
-short int *prodotto_tensoriale_shortint(short int arrayA[], short int arrayB[], int size){
+short int *prodotto_tensoriale_short_int(short int arrayA[], short int arrayB[], int size){
     short int *c;
     c = malloc(sizeof(short int)*size*size);
     for(int i=0; i<size; i++)
