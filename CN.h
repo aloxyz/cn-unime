@@ -25,9 +25,11 @@ int isVector(matrix *A);                                    //returns 1 if A is 
 int isScalar(matrix *B);                                    //returns 1 if A is a scalar(1x1 dimension)
 int sizeCmp(matrix *A, matrix *B);                          //returns 1 if A and B are the same size
 int rowsColsCmp(matrix *A, matrix *B);                      //returns 1 if cols of A == rows of B
-void printMatrix(matrix *A);                                //prints a matrix regardless of the type of its elements
 
+
+void printMatrix(matrix *A);                                //prints a matrix regardless of the type of its elements
 void initMatrix(matrix *A);
+matrix *promptMatrix();                                     //prompt for a new matrix
 matrix *newMatrix(int rowN, int colN, type t);              //creates a new matrix
 
 

@@ -20,13 +20,15 @@ int rowsColsCmp(matrix *A, matrix *B){
 }
 
 void initMatrix(matrix *A) {
-    printf("\n>> ");
+    printf("\n>>\n");
     switch(A->type){
         case short_int:
             A->elements.short_int = (short int*)malloc(sizeof(short int)*A->rows*A->cols); 
             for(int i=0; i< A->rows; i++) {
-                for(int j=0; j< A->cols; j++)
+                printf("row %d:\n", i);
+                for(int j=0; j< A->cols; j++) { 
                     scanf("%hd", &A->elements.short_int[i*A->cols + j]);
+                    }
                 fflush(stdin);
             }
             break;
@@ -34,8 +36,10 @@ void initMatrix(matrix *A) {
         case integer:
             A->elements.integer = (int*)malloc(sizeof(int)*A->rows*A->cols); 
             for(int i=0; i< A->rows; i++) {
-                for(int j=0; j< A->cols; j++)
+                printf("row %d:\n", i);
+                for(int j=0; j< A->cols; j++) { 
                     scanf("%d", &A->elements.integer[i*A->cols + j]);
+                }
                 fflush(stdin);
             }
             break;
@@ -43,8 +47,10 @@ void initMatrix(matrix *A) {
         case floating:
             A->elements.floating = (float*)malloc(sizeof(int)*A->rows*A->cols); 
             for(int i=0; i< A->rows; i++) {
-                for(int j=0; j< A->cols; j++)
+                printf("row %d:\n", i);
+                for(int j=0; j< A->cols; j++) { 
                     scanf("%f", &A->elements.floating[i*A->cols + j]);
+                }
                 fflush(stdin);
             }
             break;
@@ -52,8 +58,10 @@ void initMatrix(matrix *A) {
         case double_prec:
             A->elements.double_prec = (double*)malloc(sizeof(int)*A->rows*A->cols); 
             for(int i=0; i< A->rows; i++) {
-                for(int j=0; j< A->cols; j++)
+                printf("row %d:\n", i);
+                for(int j=0; j< A->cols; j++) { 
                     scanf("%lf", &A->elements.double_prec[i*A->cols + j]);
+                }
                 fflush(stdin);
             }
             break;
@@ -111,5 +119,21 @@ void printMatrix(matrix *A){
                 break;
     }
     
+
+}
+
+matrix *promptMatrix() {
+    int rows, cols, t;
+    printf("New matrix\n");
+    printf("rows and columns separated by space:\n>> ");
+    scanf("%d%d", &rows, &cols);
+    printf("\nDatatype:\n1.short_int\n2.integer\n3.floating\n4.double_prec\n>> ");
+    scanf("%d", &t);
+    matrix *tmp = newMatrix(rows, cols, t);
+    printf("\nInsert elements:");
+    initMatrix(tmp);
+    printf("\nNew matrix:\n");
+    printMatrix(tmp);
+    return tmp;
 
 }
