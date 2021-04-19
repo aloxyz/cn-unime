@@ -19,45 +19,56 @@ int rowsColsCmp(matrix *A, matrix *B){
     return (A->cols == B->rows);
 }
 
-matrix *newMatrix(int cols, int rows, type t){
+void initMatrix(matrix *A) {
+    printf("\n>> ");
+    switch(A->type){
+        case short_int:
+            A->elements.short_int = (short int*)malloc(sizeof(short int)*A->rows*A->cols); 
+            for(int i=0; i< A->rows; i++) {
+                for(int j=0; j< A->cols; j++)
+                    scanf("%hd", &A->elements.short_int[i*A->cols + j]);
+                fflush(stdin);
+            }
+            break;
+
+        case integer:
+            A->elements.integer = (int*)malloc(sizeof(int)*A->rows*A->cols); 
+            for(int i=0; i< A->rows; i++) {
+                for(int j=0; j< A->cols; j++)
+                    scanf("%d", &A->elements.integer[i*A->cols + j]);
+                fflush(stdin);
+            }
+            break;
+
+        case floating:
+            A->elements.floating = (float*)malloc(sizeof(int)*A->rows*A->cols); 
+            for(int i=0; i< A->rows; i++) {
+                for(int j=0; j< A->cols; j++)
+                    scanf("%f", &A->elements.floating[i*A->cols + j]);
+                fflush(stdin);
+            }
+            break;
+
+        case double_prec:
+            A->elements.double_prec = (double*)malloc(sizeof(int)*A->rows*A->cols); 
+            for(int i=0; i< A->rows; i++) {
+                for(int j=0; j< A->cols; j++)
+                    scanf("%lf", &A->elements.double_prec[i*A->cols + j]);
+                fflush(stdin);
+            }
+            break;
+    }
+}
+
+matrix *newMatrix(int rows, int cols, type t){
     matrix *A = (matrix*)malloc(sizeof(matrix));
     A->rows = rows;
     A->cols = cols;
-
     if(t > 4 || t < 1) {
         A->type = 4;
         perror("Invalid type, defaulting to double_prec\n"); 
     } else { A->type = t; }
     
-    switch(A->type){
-        case short_int:
-                A->elements.short_int = (short int*)malloc(sizeof(short int)*A->rows*A->cols); 
-                for(int i=0; i< A->rows; i++)
-                    for(int j=0; i< A->cols; j++)
-                        scanf("%hd", &A->elements.short_int[i*A->cols + A->cols]);
-                break;
-
-        case integer:
-                A->elements.integer = (int*)malloc(sizeof(int)*A->rows*A->cols); 
-                for(int i=0; i< A->rows; i++)
-                    for(int j=0; i< A->cols; j++)
-                        scanf("%d", &A->elements.integer[i*A->cols + A->cols]);
-                break;
-
-        case floating:
-                A->elements.floating = (float*)malloc(sizeof(int)*A->rows*A->cols); 
-                for(int i=0; i< A->rows; i++)
-                    for(int j=0; i< A->cols; j++)
-                        scanf("%f", &A->elements.floating[i*A->cols + A->cols]);
-                break;
-
-        case double_prec:
-                A->elements.double_prec = (double*)malloc(sizeof(int)*A->rows*A->cols); 
-                for(int i=0; i< A->rows; i++)
-                    for(int j=0; i< A->cols; j++)
-                        scanf("%lf", &A->elements.double_prec[i*A->cols + A->cols]);
-                break;
-    }
     return A;
 }
 
@@ -67,8 +78,8 @@ void printMatrix(matrix *A){
                 for(int i = 0; i<A->rows; i++){
                     printf("| ");
                     for(int j = 0; j<A->cols; j++)
-                        printf("%hd", A->elements.short_int[i*A->cols + A->cols]);
-                    printf(" |");
+                        printf("%hd ", A->elements.short_int[i*A->cols + j]);
+                    printf("|\n");
                 }
                 break;
 
@@ -76,8 +87,8 @@ void printMatrix(matrix *A){
                 for(int i = 0; i<A->rows; i++){
                     printf("| ");
                     for(int j = 0; j<A->cols; j++)
-                        printf("%d", A->elements.integer[i*A->cols + A->cols]);
-                    printf(" |");
+                        printf("%d ", A->elements.integer[i*A->cols + j]);
+                    printf("|\n");
                 }
                 break;
         
@@ -85,8 +96,8 @@ void printMatrix(matrix *A){
                 for(int i = 0; i<A->rows; i++){
                     printf("| ");
                     for(int j = 0; j<A->cols; j++)
-                        printf("%f", A->elements.floating[i*A->cols + A->cols]);
-                    printf(" |");
+                        printf("%f ", A->elements.floating[i*A->cols + j]);
+                    printf("|\n");
                 }
                 break;
 
@@ -94,8 +105,8 @@ void printMatrix(matrix *A){
                 for(int i = 0; i<A->rows; i++){
                     printf("| ");
                     for(int j = 0; j<A->cols; j++)
-                        printf("%lf", A->elements.double_prec[i*A->cols + A->cols]);
-                    printf(" |");
+                        printf("%lf ", A->elements.double_prec[i*A->cols + j]);
+                    printf("|\n");
                 }
                 break;
     }
