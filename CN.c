@@ -23,8 +23,12 @@ matrix *newMatrix(int cols, int rows, type t){
     matrix *A = (matrix*)malloc(sizeof(matrix));
     A->rows = rows;
     A->cols = cols;
-    A->type = t;
-    //scanf("%d", &A->type); //1 = short_int, 2 = int, 3 = float, 4 = double
+
+    if(t > 4 || t < 1) {
+        A->type = 4;
+        perror("Invalid type, defaulting to double_prec\n"); 
+    } else { A->type = t; }
+    
     switch(A->type){
         case short_int:
                 A->elements.short_int = (short int*)malloc(sizeof(short int)*A->rows*A->cols); 
@@ -53,9 +57,6 @@ matrix *newMatrix(int cols, int rows, type t){
                     for(int j=0; i< A->cols; j++)
                         scanf("%lf", &A->elements.double_prec[i*A->cols + A->cols]);
                 break;
-
-        default:
-            puts("Wrong code");
     }
     return A;
 }
@@ -101,214 +102,3 @@ void printMatrix(matrix *A){
     
 
 }
-
-//SHORT INT
-short int *somma_matrici_short_int(short int *A, short int *B, int size){
-    int i,j;
-    short int *C;
-
-    C = malloc(sizeof(short int)*size*size);
-    for(i=0; i<size; i++)
-        for(j=0; j<size; j++) 
-            C[i*size+j] = A[i*size+j] + B[i*size+j];
-    return C;
-}
-
-
-short int prodotto_scalare_short_int(short int arrayA[], short int arrayB[], int size){
-    int z=0, i;
-    for(i=0; i<size; i++){
-        z+= arrayA[i] * arrayB[i];
-    }
-    return z;
-}
-short int *prodotto_tensoriale_short_int(short int arrayA[], short int arrayB[], int size){
-    short int *c;
-    c = malloc(sizeof(short int)*size*size);
-    for(int i=0; i<size; i++)
-        for(int j=0; j<size; j++)        
-            c[i*size+j]=arrayA[i]*arrayB[j];
-
-    return c;
-}
-
-//INT
-int *somma_matrici_int(int *A, int *B, int size){
-    int i,j;
-    int *C;
-
-    C = malloc(sizeof(int)*size*size);
-    for(i=0; i<size; i++)
-        for(j=0; j<size; j++) 
-            C[i*size+j] = A[i*size+j] + B[i*size+j];
-    return C;
-}
-
-int prodotto_scalare_int(int arrayA[], int arrayB[], int size){
-    int z=0, i;
-    for(i=0; i<size; i++){
-        z+= arrayA[i] * arrayB[i];
-    }
-    return z;
-}
-int *prodotto_tensoriale_int(int arrayA[], int arrayB[], int size){
-    int *c;
-    c = malloc(sizeof(int)*size*size);
-    for(int i=0; i<size; i++)
-        for(int j=0; j<size; j++)        
-            c[i*size+j]=arrayA[i]*arrayB[j];
-
-    return c;
-}
-
-//FLOAT
-float *somma_matrici_float(float *A, float *B, int size){
-    int i,j;
-    float *C;
-
-    C = malloc(sizeof(float)*size*size);
-    for(i=0; i<size; i++)
-        for(j=0; j<size; j++) 
-            C[i*size+j] = A[i*size+j] + B[i*size+j];
-    return C;
-}
-
-float prodotto_scalare_float(float arrayA[], float arrayB[], int size){
-    int z=0, i;
-    for(i=0; i<size; i++){
-        z+= arrayA[i] * arrayB[i];
-    }
-    return z;
-}
-float *prodotto_tensoriale_float(float arrayA[], float arrayB[], int size){
-    float *c;
-    c = malloc(sizeof(float)*size*size);
-    for(int i=0; i<size; i++)
-        for(int j=0; j<size; j++)        
-            c[i*size+j]=arrayA[i]*arrayB[j];
-
-    return c;
-}
-
-//DOUBLE
-double *somma_matrici_double(double *A, double *B, int size){
-    int i,j;
-    double *C;
-
-    C = malloc(sizeof(double)*size*size);
-    for(i=0; i<size; i++)
-        for(j=0; j<size; j++) 
-            C[i*size+j] = A[i*size+j] + B[i*size+j];
-    return C;
-}
-
-double prodotto_scalare_double(double arrayA[], double arrayB[], int size){
-    int z=0, i;
-    for(i=0; i<size; i++){
-        z+= arrayA[i] * arrayB[i];
-    }
-    return z;
-}
-double *prodotto_tensoriale_double(double arrayA[], double arrayB[], int size){
-    double *c;
-    c = malloc(sizeof(double)*size*size);
-    for(int i=0; i<size; i++)
-        for(int j=0; j<size; j++)        
-            c[i*size+j]=arrayA[i]*arrayB[j];
-
-    return c;
-}
-
-void fact(int m) {
-    int x = 1; float y = 1; double z = 1;
-    for(int i = 2; i < m + 1; i++) {
-        x *= i; y *= i; z *= i;
-        printf("%d!: int: %d\t float: %.3f\tdouble: %.5lf\n", i, x, y, z);
-    }
-}
-
-void fact_plus(int x, float y, double z, int max) {
-
-    printf("max: %d\n-------", max);
-
-    printf("\nint %d:\n\n", x);
-    while(x < max) {
-        int tmp = x;
-        for(int i = x - 1; i >= 2; i--) {
-            tmp *= i;
-        }
-        printf("%d! = %d\n", x, tmp);
-        x++;
-    }
-    printf("\nfloat %.2f:\n\n", y);
-    while(y < max) {
-        float tmp = y;
-        for(int i = y - 1; i >= 2; i--) {
-            tmp *= i;
-        }
-        printf("%.2f! = %.2f\n", y, tmp);
-        y++;
-    }
-    printf("\ndouble %.4lf:\n\n", z);
-    while(z < max) {
-        double tmp = z;
-        for(int i = z - 1; i >= 2; i--) {
-            tmp *= i;
-        }
-        printf("%.4lf! = %.4lf\n", z, tmp);
-        z++;
-    }
-}
-
-int int_sum(int *v, int n) {
-    int sum = v[0];
-    for(int i = 0; i < n; i++) { sum += v[i]; }
-    return sum;
-}
-
-double double_sum(double *v, int n) {
-    double sum = v[0];
-    for(int i = 0; i < n; i++) { sum += v[i]; }
-    return sum;
-}
-
-int int_prod(int *v, int n) {
-    int prod = v[0];
-    for(int i = 0; i < n; i++) { prod *= v[i]; }
-    return prod;
-}
-
-int int_avg(int *v, int n) {
-    return (int_sum(v, n)/n);
-}
-
-double double_avg(double *v, int n) {
-    return (double_sum(v, n)/n);
-}
-
-int int_min(int *v, int n) {
-    int tmp = v[0];
-    for(int i = 0; i < n; i++) {
-        if(tmp > v[i]) tmp = v[i];
-    }
-    return tmp;
-}
-
-int int_max(int *v, int n) {
-    int tmp = v[0];
-    for(int i = 0; i < n; i++) {
-        if(tmp < v[i]) tmp = v[i];
-    }
-    return tmp;
-}
-
-void int_sort(int *v, int n) {
-    int result[n];
-    int tmp = v[0];
-    for(int i = 0; i < n; i++) {
-        for(int j = 0; i < n; j++) {
-        }
-    result[i] = tmp;
-    }
-}
-
