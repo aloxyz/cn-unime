@@ -37,6 +37,7 @@ typedef struct Matrix {
 
 //generic purpose functions
 int size(Matrix *A);                                            //returns the number of elements (rows * columns)
+int is_vector(Matrix *A);                                       //returns 1 if A is a vector
 int sizecmp(Matrix *A, Matrix *B);                              //returns 1 if A and B have the same number of rows and columns
 int rccmp(Matrix *A, Matrix *B);                                //returns 1 if cols of A == rows of B
 int summable(Matrix *A, Matrix *B);                             //returns 1 if the two matrixes can be summed
