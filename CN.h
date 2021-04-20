@@ -3,12 +3,12 @@
 #include <string.h>
 
 //type definitions
-typedef enum Type {
+typedef enum DataType {
     short_int = 1,
     integer,
     floating,
     double_prec
-    } Type;
+    } DataType;
 
 typedef enum MatrixType {
     matrix, 
@@ -28,7 +28,7 @@ typedef struct Matrix {
     char name[16];
     Pointer elements;
     int rows, cols;
-    Type type;
+    DataType type;
     MatrixType MType;
     
     struct Matrix *next;
@@ -41,7 +41,7 @@ int sizecmp(Matrix *A, Matrix *B);                              //returns 1 if A
 int rccmp(Matrix *A, Matrix *B);                                //returns 1 if cols of A == rows of B
 int summable(Matrix *A, Matrix *B);                             //returns 1 if the two matrixes can be summed
 void init_elements(Matrix *A);                                  //initializes the elements of a matrix
-Matrix *new_matrix(char *name, int rows, int cols, Type t);     //creates a new matrix
+Matrix *new_matrix(char *name, int rows, int cols, DataType t);     //creates a new matrix
 void print_matrix(Matrix *A);                                   //prints a Matrix regardless of the type of its elements
 Matrix *prompt_matrix();                                        //prompt for a new matrix (wraps new_matrix and init_elements)
 

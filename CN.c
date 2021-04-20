@@ -73,7 +73,7 @@ void init_elements(Matrix *A) {
     }
 }
 
-Matrix *new_matrix(char *name, int rows, int cols, Type t){
+Matrix *new_matrix(char *name, int rows, int cols, DataType t){
     Matrix *A = (Matrix*)malloc(sizeof(Matrix));
     strncpy(A->name, name, 15);
     A->rows = rows;
