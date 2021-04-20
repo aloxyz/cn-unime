@@ -23,6 +23,13 @@ int summable(Matrix *A, Matrix *B){
     return ((sizecmp(A, B) || (A->MType==scalar) || B->MType == scalar) || ((is_vector(A) || is_vector(B)) && (rccmp(A, B) || rccmp(B, A))));
 }
 
+MatrixType matrix_typeof(Matrix *A){
+    if(A->rows == 1 && A->cols == 1) return scalar;
+    else if(A->rows > 1 && A->cols > 1) return matrix;
+    else if(A->rows == 1)  return row_vector;
+    else if(A->cols == 1) return col_vector;
+    else {printf("Invalid MatrixType, defaulting to scalar\n"); return scalar;}
+}
 
 void init_elements(Matrix *A) {
     printf("\n>>\n");
@@ -79,11 +86,7 @@ Matrix *new_matrix(char *name, int rows, int cols, Type t){
     A->rows = rows;
     A->cols = cols;
     
-    if(rows == 1 && cols == 1) A->MType = scalar;
-    else if(rows > 1 && cols > 1) A->MType = matrix;
-    else if(rows == 1) A->MType = row_vector;
-    else if(cols == 1) A->MType = col_vector;
-    else if(rows == 0 || cols == 0){ printf("Invalid dimensions"); return NULL;}
+    A->MType = matrix_typeof(A);
 
     if(t > 4 || t < 1) {
         A->type = 4;
@@ -152,4 +155,41 @@ Matrix *prompt_matrix() {
     print_matrix(tmp);
     return tmp;
 
+}
+
+Matrix *matrix_sum(Matrix *A, Matrix *B){
+    Matrix *C=(Matrix*)malloc(sizeof(Matrix));
+    if(summable(A, B)){
+
+        if(A->rows > B ->rows) C->rows = A->rows; else C->rows = B->rows;
+        if(A->cols > B ->cols) C->cols = A->cols; else C->cols = B->cols;
+        if(A->type > B->type) C->type = A->type; else C->type = B->type;
+        C->MType = matrix_typeof(C);
+        strcpy(C->name, "ans");
+
+        switch(C->type){
+            case short_int:
+                C->elements.short_int=(short int*)malloc(sizeof(short int)*C->rows*C->cols);
+                break;
+            case integer:
+                C->elements.integer=(int*)malloc(sizeof(int)*C->rows*C->cols);
+                break;
+
+            case floating:
+                C->elements.floating=(float*)malloc(sizeof(float)*C->rows*C->cols);
+                break;
+
+            case double_prec:
+                C->elements.double_prec=(double*)malloc(sizeof(double)*C->rows*C->cols);
+                break;
+        }
+        if(A->MType != col_vector && B->MType != col_vector){
+            for(int i; i< C->rows; i++)
+                for(int j; j< C->cols; j++)
+                    C->elements.short_int[i*C->cols + j] = A->elements.short_int[(i*C->cols + j)%size(A)] + B->elements.short_int[(i*C->cols + j)%size(B)];
+        }
+        print_matrix(C);
+    }
+    else
+        return NULL;
 }

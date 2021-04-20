@@ -41,6 +41,7 @@ int is_vector(Matrix *A);                                       //returns 1 if A
 int sizecmp(Matrix *A, Matrix *B);                              //returns 1 if A and B have the same number of rows and columns
 int rccmp(Matrix *A, Matrix *B);                                //returns 1 if cols of A == rows of B
 int summable(Matrix *A, Matrix *B);                             //returns 1 if the two matrixes can be summed
+MatrixType matrix_typeof(Matrix *A);                            //returns MatrixType 
 void init_elements(Matrix *A);                                  //initializes the elements of a matrix
 Matrix *new_matrix(char *name, int rows, int cols, Type t);     //creates a new matrix
 void print_matrix(Matrix *A);                                   //prints a Matrix regardless of the type of its elements
