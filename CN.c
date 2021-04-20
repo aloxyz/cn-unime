@@ -1,12 +1,17 @@
 #include"CN.h"
 
 //general purpose functions
+
+int size(Matrix *A){
+    return(A->rows * A->cols);
+}
+
 int is_vector(Matrix *A){
-    return ((A->rows == 1) || (A->cols == 1));
+    return (((A->rows == 1) && (A->cols > 1)) || ((A->cols == 1) && (A->rows > 1)));
 }
 
 int is_scalar(Matrix *A){
-    return ((A->rows == 1) && (A->cols == 1)); 
+    return (size(A) == 1); 
 }
 
 int sizecmp(Matrix *A, Matrix *B){
@@ -16,6 +21,12 @@ int sizecmp(Matrix *A, Matrix *B){
 int rccmp(Matrix *A, Matrix *B){
     return (A->cols == B->rows);
 }
+
+
+int summable(Matrix *A, Matrix *B){
+    return (sizecmp(A, B) || (is_scalar(A) || is_scalar(B)) || ((is_vector(A) || is_vector(B)) && (rccmp(A, B) || rccmp(B, A))));
+}
+
 
 void init_elements(Matrix *A) {
     printf("\n>>\n");
@@ -138,4 +149,39 @@ Matrix *prompt_matrix() {
     print_matrix(tmp);
     return tmp;
 
+}
+
+Matrix *matrix_sum(Matrix *A, Matrix *B){
+    Matrix *C=(Matrix*)malloc(sizeof(Matrix));
+    if(summable(A, B)){
+
+        if(A->rows > B ->rows) C->rows = A->rows; else C->rows = B->rows;
+        if(A->cols > B ->cols) C->cols = A->cols; else C->cols = B->cols;
+        if(A->type > B->type) C->type = A->type; else C->type = B->type;
+        switch(C->type){
+            case short_int:
+                C->elements.short_int=(short int*)malloc(sizeof(short int)*C->rows*C->cols);
+                break;
+            case integer:
+                C->elements.integer=(int*)malloc(sizeof(int)*C->rows*C->cols);
+                break;
+            
+            case floating:
+                C->elements.floating=(float*)malloc(sizeof(float)*C->rows*C->cols);
+                break;
+                
+            case double_prec:
+                C->elements.double_prec=(double*)malloc(sizeof(double)*C->rows*C->cols);
+                break;
+        }
+        if(sizecmp(A, B)){
+            for(int i; i< C->rows; i++)
+                for(int j; j< C->cols; j++)
+                    C->elements.short_int[i*C->cols + j] = A->elements.short_int[(i*C->cols + j)%size(A)] + B->elements.short_int[(i*C->cols + j)%size(B)];
+        }
+        
+        
+    }
+    else
+        return NULL;
 }
