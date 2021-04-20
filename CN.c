@@ -31,7 +31,45 @@ MatrixType matrix_typeof(Matrix *A){
     else {printf("Invalid MatrixType, defaulting to scalar\n"); return scalar;}
 }
 
-void init_elements(Matrix *A) {
+void init_elements(Matrix *A, Pointer v) {
+    switch (A->type){
+        case short_int:
+            A->elements.short_int = (short int*)malloc(sizeof(short int)*A->rows*A->cols); 
+            for(int i=0; i< A->rows; i++) {
+                for(int j=0; j< A->cols; j++)
+                    A->elements.short_int[i*A->cols + j] = v.short_int[i*A->cols + j];
+        }
+        break;
+
+        case integer:
+            A->elements.integer = (int*)malloc(sizeof(int)*A->rows*A->cols); 
+            for(int i=0; i< A->rows; i++) {
+                for(int j=0; j< A->cols; j++){
+                    A->elements.integer[i*A->cols + j] = v.integer[i*A->cols + j];
+                }
+            }
+        break;
+
+        case floating:
+            A->elements.floating = (float*)malloc(sizeof(float)*A->rows*A->cols); 
+            for(int i=0; i< A->rows; i++) {
+                for(int j=0; j< A->cols; j++)
+                    A->elements.floating[i*A->cols + j] = v.floating[i*A->cols + j];
+            }
+        break;
+
+        case double_prec:
+            A->elements.double_prec = (double*)malloc(sizeof(double)*A->rows*A->cols); 
+            for(int i=0; i< A->rows; i++) {
+                for(int j=0; j< A->cols; j++)
+                    A->elements.integer[i*A->cols + j] = v.double_prec[i*A->cols + j];
+        }
+
+        break;
+    }
+}
+
+void prompt_init_elements(Matrix *A) {
     printf("\n>>\n");
     switch(A->type){
         case short_int:
@@ -151,7 +189,7 @@ Matrix *prompt_matrix() {
     scanf("%d", &t);
     Matrix *tmp = new_matrix(name, rows, cols, t);
     printf("\nInsert elements:");
-    init_elements(tmp);
+    prompt_init_elements(tmp);
     print_matrix(tmp);
     return tmp;
 

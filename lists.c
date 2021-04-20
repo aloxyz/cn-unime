@@ -1,6 +1,5 @@
 #include "lists.h"
 
-//get n-th 
 Matrix *get_matrix(Matrix *head, char *name) {
     while (head != NULL) {
         if(!strcmp(name, head->name)) return head;
