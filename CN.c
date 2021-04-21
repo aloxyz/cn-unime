@@ -195,6 +195,78 @@ Matrix *prompt_matrix() {
 
 }
 
+void cast(Matrix *A, DataType type){
+    Pointer tmp = A->elements;
+    switch(A->type){
+        case short_int:
+            switch(type){
+                case short_int: break;
+                case integer: 
+                            A->elements.integer = (int*)malloc(sizeof(int)*A->cols*A->rows);
+                            for(int i=0; i<size(A); i++) A->elements.integer[i] = (int)tmp.short_int[i];
+                            break;
+                case floating:
+                            A->elements.floating = (float*)malloc(sizeof(float)*A->cols*A->rows);
+                            for(int i=0; i<size(A); i++) A->elements.floating[i] = (float)tmp.short_int[i];
+                            break;
+                case double_prec:
+                            A->elements.double_prec = (double*)malloc(sizeof(double)*A->cols*A->rows);
+                            for(int i=0; i<size(A); i++) A->elements.double_prec[i] = (double)tmp.short_int[i];
+            break;
+            }
+        case integer:
+            switch(type){
+                case short_int: 
+                            A->elements.short_int = (short int*)malloc(sizeof(int)*A->cols*A->rows);
+                            for(int i=0; i<size(A); i++) A->elements.integer[i] = (int)tmp.integer[i];
+                            break;
+                case integer: break;
+                case floating:
+                            A->elements.floating = (float*)malloc(sizeof(float)*A->cols*A->rows);
+                            for(int i=0; i<size(A); i++) A->elements.floating[i] = (float)tmp.integer[i];
+                            break;
+                case double_prec:
+                            A->elements.double_prec = (double*)malloc(sizeof(double)*A->cols*A->rows);
+                            for(int i=0; i<size(A); i++) A->elements.double_prec[i] = (double)tmp.integer[i];
+            break;
+            }
+        case floating:
+            switch(type){
+                case short_int: 
+                            A->elements.short_int = (short int*)malloc(sizeof(short int)*A->cols*A->rows);
+                            for(int i=0; i<size(A); i++) A->elements.integer[i] = (short int)tmp.floating[i];
+                            break;
+                case integer:
+                            A->elements.floating = (float*)malloc(sizeof(float)*A->cols*A->rows);
+                            for(int i=0; i<size(A); i++) A->elements.integer[i] = (int)tmp.floating[i];
+                            break;
+                case floating: break;
+                case double_prec:
+                            A->elements.double_prec = (double*)malloc(sizeof(double)*A->cols*A->rows);
+                            for(int i=0; i<size(A); i++) A->elements.double_prec[i] = (double)tmp.floating[i];
+            break;
+            }
+        case double_prec:
+            switch(type){
+                case short_int: 
+                            A->elements.short_int = (short int*)malloc(sizeof(short int)*A->cols*A->rows);
+                            for(int i=0; i<size(A); i++) A->elements.short_int[i] = (short int)tmp.double_prec[i];
+                            break;
+                case integer:
+                            A->elements.integer = (int*)malloc(sizeof(int)*A->cols*A->rows);
+                            for(int i=0; i<size(A); i++) A->elements.integer[i] = (int)tmp.double_prec[i];
+                            break;
+                case floating:
+                            A->elements.floating = (float*)malloc(sizeof(float)*A->cols*A->rows);
+                            for(int i=0; i<size(A); i++) A->elements.floating[i] = (float)tmp.double_prec[i];
+                case double_prec: break;
+            break;
+            }
+    }
+
+}
+
+
 Matrix *matrix_sum(Matrix *A, Matrix *B){
     Matrix *C=(Matrix*)malloc(sizeof(Matrix));
     if(summable(A, B)){
@@ -203,7 +275,9 @@ Matrix *matrix_sum(Matrix *A, Matrix *B){
         if(A->type > B->type) C->type = A->type; else C->type = B->type;
         C->MType = matrix_typeof(C);
         strcpy(C->name, "ans");
-
+        cast(A, C->type);
+        cast(B, C->type);
+        
         switch(C->type){
             case short_int:
                 C->elements.short_int=(short int*)malloc(sizeof(short int)*C->rows*C->cols);
