@@ -32,7 +32,7 @@ MatrixType matrix_typeof(Matrix *A){
 }
 
 void init_elements(Matrix *A, Pointer v) {
-    switch (A->type){
+    switch (A->datatype){
         case short_int:
             A->elements.short_int = (short int*)malloc(sizeof(short int)*A->rows*A->cols); 
             for(int i=0; i< A->rows; i++) {
@@ -71,7 +71,7 @@ void init_elements(Matrix *A, Pointer v) {
 
 void prompt_init_elements(Matrix *A) {
     printf("\n>>\n");
-    switch(A->type){
+    switch(A->datatype){
         case short_int:
             A->elements.short_int = (short int*)malloc(sizeof(short int)*A->rows*A->cols); 
             for(int i=0; i< A->rows; i++) {
@@ -127,53 +127,55 @@ Matrix *new_matrix(char *name, int rows, int cols, DataType t){
     A->MType = matrix_typeof(A);
 
     if(t > 4 || t < 1) {
-        A->type = 4;
-        perror("Invalid type, defaulting to double_prec\n"); 
-    } else { A->type = t; }
+        A->datatype = 4;
+        perror("Invalid datatype, defaulting to double_prec\n"); 
+    } else { A->datatype = t; }
     
     return A;
 }
 
 void print_matrix(Matrix *A){
-    printf("%s:\n", A->name);
-    switch(A->type){
-        case short_int:
-                for(int i = 0; i<A->rows; i++){
-                    printf("| ");
-                    for(int j = 0; j<A->cols; j++)
-                        printf("%hd ", A->elements.short_int[i*A->cols + j]);
-                    printf("|\n");
-                }
-                break;
+    if (A == NULL);
+    else {
+        printf("%s:\n", A->name);
+        switch(A->datatype){
+            case short_int:
+                    for(int i = 0; i<A->rows; i++){
+                        printf("| ");
+                        for(int j = 0; j<A->cols; j++)
+                            printf("%hd ", A->elements.short_int[i*A->cols + j]);
+                        printf("|\n");
+                    }
+                    break;
 
-        case integer: 
-                for(int i = 0; i<A->rows; i++){
-                    printf("| ");
-                    for(int j = 0; j<A->cols; j++)
-                        printf("%d ", A->elements.integer[i*A->cols + j]);
-                    printf("|\n");
-                }
-                break;
-        
-        case floating:
-                for(int i = 0; i<A->rows; i++){
-                    printf("| ");
-                    for(int j = 0; j<A->cols; j++)
-                        printf("%f ", A->elements.floating[i*A->cols + j]);
-                    printf("|\n");
-                }
-                break;
+            case integer: 
+                    for(int i = 0; i<A->rows; i++){
+                        printf("| ");
+                        for(int j = 0; j<A->cols; j++)
+                            printf("%d ", A->elements.integer[i*A->cols + j]);
+                        printf("|\n");
+                    }
+                    break;
+            
+            case floating:
+                    for(int i = 0; i<A->rows; i++){
+                        printf("| ");
+                        for(int j = 0; j<A->cols; j++)
+                            printf("%f ", A->elements.floating[i*A->cols + j]);
+                        printf("|\n");
+                    }
+                    break;
 
-        case double_prec:
-                for(int i = 0; i<A->rows; i++){
-                    printf("| ");
-                    for(int j = 0; j<A->cols; j++)
-                        printf("%lf ", A->elements.double_prec[i*A->cols + j]);
-                    printf("|\n");
-                }
-                break;
+            case double_prec:
+                    for(int i = 0; i<A->rows; i++){
+                        printf("| ");
+                        for(int j = 0; j<A->cols; j++)
+                            printf("%lf ", A->elements.double_prec[i*A->cols + j]);
+                        printf("|\n");
+                    }
+                    break;
+        }
     }
-    
 
 }
 
@@ -195,11 +197,11 @@ Matrix *prompt_matrix() {
 
 }
 
-void cast(Matrix *A, DataType type){
+void cast_matrix(Matrix *A, DataType datatype){
     Pointer tmp = A->elements;
-    switch(A->type){
+    switch(A->datatype){
         case short_int:
-            switch(type){
+            switch(datatype){
                 case short_int: break;
                 case integer: 
                             A->elements.integer = (int*)malloc(sizeof(int)*A->cols*A->rows);
@@ -215,7 +217,7 @@ void cast(Matrix *A, DataType type){
             break;
             }
         case integer:
-            switch(type){
+            switch(datatype){
                 case short_int: 
                             A->elements.short_int = (short int*)malloc(sizeof(int)*A->cols*A->rows);
                             for(int i=0; i<size(A); i++) A->elements.integer[i] = (int)tmp.integer[i];
@@ -231,7 +233,7 @@ void cast(Matrix *A, DataType type){
             break;
             }
         case floating:
-            switch(type){
+            switch(datatype){
                 case short_int: 
                             A->elements.short_int = (short int*)malloc(sizeof(short int)*A->cols*A->rows);
                             for(int i=0; i<size(A); i++) A->elements.integer[i] = (short int)tmp.floating[i];
@@ -247,7 +249,7 @@ void cast(Matrix *A, DataType type){
             break;
             }
         case double_prec:
-            switch(type){
+            switch(datatype){
                 case short_int: 
                             A->elements.short_int = (short int*)malloc(sizeof(short int)*A->cols*A->rows);
                             for(int i=0; i<size(A); i++) A->elements.short_int[i] = (short int)tmp.double_prec[i];
@@ -266,19 +268,18 @@ void cast(Matrix *A, DataType type){
 
 }
 
-
 Matrix *matrix_sum(Matrix *A, Matrix *B){
     Matrix *C=(Matrix*)malloc(sizeof(Matrix));
     if(summable(A, B)){
         if(A->rows > B ->rows) C->rows = A->rows; else C->rows = B->rows;
         if(A->cols > B ->cols) C->cols = A->cols; else C->cols = B->cols;
-        if(A->type > B->type) C->type = A->type; else C->type = B->type;
+        if(A->datatype > B->datatype) C->datatype = A->datatype; else C->datatype = B->datatype;
         C->MType = matrix_typeof(C);
         strcpy(C->name, "ans");
-        cast(A, C->type);
-        cast(B, C->type);
+        cast_matrix(A, C->datatype);
+        cast_matrix(B, C->datatype);
         
-        switch(C->type){
+        switch(C->datatype){
             case short_int:
                 C->elements.short_int=(short int*)malloc(sizeof(short int)*C->rows*C->cols);
                 break;
@@ -313,4 +314,58 @@ Matrix *matrix_sum(Matrix *A, Matrix *B){
         
         return NULL;
     }
+}
+
+char *str_matrix_MTypeof(Matrix *A) {
+    switch (A->MType) {
+        case row_vector:
+        return "row_vector";
+        break;
+        
+        case col_vector:
+        return "col_vector";
+        break;
+        
+        case scalar:
+        return "scalar";
+        break;
+        
+        case matrix:
+        return "matrix";
+        break;
+    }
+}
+
+char *str_matrix_typeof(Matrix *A) {
+    switch (A->datatype) {
+        case short_int:
+        return "short_int";
+        break;
+        
+        case integer:
+        return "integer";
+        break;
+        
+        case floating:
+        return "floating";
+        break;
+        
+        case double_prec:
+        return "double_prec";
+        break;
+    }
+}
+
+void print_info(Matrix *A) {
+    char *next = "NULL";
+    if(A->next != NULL) strcpy(next, A->next->name);
+
+    printf("%s: %dx%d %s %s, %s->%s",
+    A->name,
+    A->rows,
+    A->cols,
+    str_matrix_typeof(A),
+    str_matrix_MTypeof(A),
+    A->name,
+    next);
 }

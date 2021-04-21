@@ -37,6 +37,12 @@ int main() {
 
     //default debug matrices
 
+/*    printf("removing %s", A->name);
+    remove_matrix(head, "A");
+    printf("\n");
+    print_list(head);
+*/
+
     char c;
     char cc[16];
     char m1[16];
@@ -45,6 +51,11 @@ int main() {
         printf("\n>> ");
         scanf(" %c", &c);
         switch (c) {
+            case 'i':
+                printf("\ninfo: ");
+                scanf("%s", cc);
+                print_info(get_matrix(head, cc));
+                break;
             case 's':
                 printf("\nsum: ");
                 scanf("%s%s", m1, m2);

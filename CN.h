@@ -28,7 +28,7 @@ typedef struct Matrix {
     char name[16];
     Pointer elements;
     int rows, cols;
-    DataType type;
+    DataType datatype;
     MatrixType MType;
     
     struct Matrix *next;
@@ -42,12 +42,19 @@ int sizecmp(Matrix *A, Matrix *B);                              //returns 1 if A
 int rccmp(Matrix *A, Matrix *B);                                //returns 1 if cols of A == rows of B
 int summable(Matrix *A, Matrix *B);                             //returns 1 if the two matrixes can be summed
 MatrixType matrix_typeof(Matrix *A);                            //returns MatrixType 
-void prompt_init_elements(Matrix *A);                           //initializes the elements of a matrix
+char *str_matrix_MTypeof(Matrix *A);
+char *str_matrix_typeof(Matrix *A);
+void print_info(Matrix *A);
+
+//matrix control functions
+void cast_matrix(Matrix* A, DataType);                              //casts a matrix type to the argument
 void init_elements(Matrix *A, Pointer v);                                  
 Matrix *new_matrix(char *name, int rows, int cols, DataType t);     //creates a new matrix
+
+//prompt functions
+void prompt_init_elements(Matrix *A);                           //initializes the elements of a matrix
 void print_matrix(Matrix *A);                                   //prints a Matrix regardless of the type of its elements
 Matrix *prompt_matrix();                                        //prompt for a new matrix (wraps new_matrix and init_elements)
-void cast(Matrix* A, DataType);                              //casts a matrix type to the argument
 
 //matrix operations
 Matrix *matrix_sum(Matrix *A, Matrix *B);                    //sum two matrices A and B

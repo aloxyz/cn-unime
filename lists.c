@@ -43,3 +43,13 @@ void print_list(Matrix *head){
     }
     printf("\n");
 }
+
+void rename_matrix(char *name, Matrix *A) {
+    strncpy(A->name, name, 16);
+}
+
+void clone_matrix(Matrix *head, Matrix *A, char* name) {
+    push_matrix(&head, A);
+    rename_matrix(name, get_last(head));
+}
+
