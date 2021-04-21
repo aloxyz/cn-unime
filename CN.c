@@ -11,7 +11,7 @@ int is_vector(Matrix *A){
 }
 
 int sizecmp(Matrix *A, Matrix *B){
-    return ((A->rows == B->cols) && (A->cols == B->cols));
+    return ((A->rows == B->rows) && (A->cols == B->cols));
 }
 
 int rccmp(Matrix *A, Matrix *B){
@@ -20,7 +20,7 @@ int rccmp(Matrix *A, Matrix *B){
 
 
 int summable(Matrix *A, Matrix *B){
-    return ((sizecmp(A, B) || (A->MType==scalar) || B->MType == scalar) || ((is_vector(A) || is_vector(B)) && (rccmp(A, B) || rccmp(B, A))));
+    return ((sizecmp(A, B) || (A->MType==scalar) || B->MType == scalar) || ((is_vector(A) || is_vector(B)) && (A->rows == B->rows || A->cols == B->cols)));
 }
 
 MatrixType matrix_typeof(Matrix *A){
@@ -198,7 +198,6 @@ Matrix *prompt_matrix() {
 Matrix *matrix_sum(Matrix *A, Matrix *B){
     Matrix *C=(Matrix*)malloc(sizeof(Matrix));
     if(summable(A, B)){
-
         if(A->rows > B ->rows) C->rows = A->rows; else C->rows = B->rows;
         if(A->cols > B ->cols) C->cols = A->cols; else C->cols = B->cols;
         if(A->type > B->type) C->type = A->type; else C->type = B->type;
@@ -221,13 +220,23 @@ Matrix *matrix_sum(Matrix *A, Matrix *B){
                 C->elements.double_prec=(double*)malloc(sizeof(double)*C->rows*C->cols);
                 break;
         }
-        if(A->MType != col_vector && B->MType != col_vector){
-            for(int i; i< C->rows; i++)
-                for(int j; j< C->cols; j++)
-                    C->elements.short_int[i*C->cols + j] = A->elements.short_int[(i*C->cols + j)%size(A)] + B->elements.short_int[(i*C->cols + j)%size(B)];
+        
+        if((A->MType != col_vector && B->MType != col_vector) || (A->MType == col_vector && B->MType == col_vector) || (A->MType == scalar || B->MType == scalar)){
+            for(int i=0; i< size(C); i++)
+                C->elements.short_int[i] = A->elements.short_int[(i)%size(A)] + B->elements.short_int[(i)%size(B)];
+        }
+        else {
+        Matrix *non_col, *v_col;
+        if(B->MType == col_vector) {non_col = A; v_col = B;} else {non_col = B; v_col = A;} 
+            for(int i=0; i< C->rows; i++)
+                for(int j=0; j< C->cols; j++) 
+                     C->elements.short_int[(i*C->cols + j)] = non_col->elements.short_int[(i*C->cols + j)%size(C)] + v_col->elements.short_int[i]; 
         }
         print_matrix(C);
+        return C;
     }
-    else
+    else{
+        
         return NULL;
+    }
 }
