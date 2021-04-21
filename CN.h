@@ -47,7 +47,7 @@ void init_elements(Matrix *A, Pointer v);
 Matrix *new_matrix(char *name, int rows, int cols, DataType t);     //creates a new matrix
 void print_matrix(Matrix *A);                                   //prints a Matrix regardless of the type of its elements
 Matrix *prompt_matrix();                                        //prompt for a new matrix (wraps new_matrix and init_elements)
-void cast(Matrix* A, DataType);                              //casts a matrix type to the argument
+void matrix_typeconv(Matrix* A, DataType);                              //casts a matrix type to the argument
 
 //matrix operations
 Matrix *matrix_sum(Matrix *A, Matrix *B);                    //sum two matrices A and B
