@@ -44,15 +44,17 @@ void print_list(Matrix *head){
     printf("\n");
 }
 
-void remove_matrix(Matrix *head, char *name) {
-    Matrix *tmp = head->next;
-    Matrix *match = get_matrix(head, name);
-    while(tmp->next != NULL && strcmp(name, tmp->name) != 0) {
-        tmp = tmp->next;
+void remove_matrix(Matrix **head, char *name) {
+    Matrix *prec = *head;
+    Matrix *current = *head;
+    while(current != NULL && strcmp(name, current->name) != 0) {
+        prec = current;
+        current = current->next;
     }
-    if(match->next != NULL) tmp->next = match->next;
-    match->next = NULL;
-    free(match);
+    if(current == *head) *head = current->next;
+    if(current->next == NULL) prec->next = NULL;
+    else prec->next = current->next; 
+    free(current);
 }
 
 void rename_matrix(char *name, Matrix *A) {

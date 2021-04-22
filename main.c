@@ -54,7 +54,7 @@ int main() {
             case 'r':
                 printf("\nremove: ");
                 scanf("%s", cc);
-                remove_matrix(head, cc);
+                remove_matrix(&head, cc);
                 printf("\ndone");
                 break;
             case 'i':
