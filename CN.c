@@ -18,7 +18,6 @@ int rccmp(Matrix *A, Matrix *B){
     return (A->cols == B->rows);
 }
 
-
 int summable(Matrix *A, Matrix *B){
     return ((sizecmp(A, B) || (A->MType==scalar) || B->MType == scalar) || ((is_vector(A) || is_vector(B)) && (A->rows == B->rows || A->cols == B->cols)));
 }
@@ -182,12 +181,11 @@ void print_matrix(Matrix *A){
 Matrix *prompt_matrix() {
     int rows, cols, t;
     char name[16];
-    printf("New matrix\n");
-    printf("Name: ");
+    printf("name: ");
     scanf("%s", name);
-    printf("Rows and columns separated by space:\n>> ");
+    printf("\nrows and columns:\n>> ");
     scanf("%d%d", &rows, &cols);
-    printf("\nDatatype:\n1.short_int\n2.integer\n3.floating\n4.double_prec\n>> ");
+    printf("\ndatatype:\n1.short_int\n2.integer\n3.floating\n4.double_prec\n>> ");
     scanf("%d", &t);
     Matrix *tmp = new_matrix(name, rows, cols, t);
     printf("\nInsert elements:");
@@ -323,7 +321,7 @@ Matrix *matrix_sum(Matrix *A, Matrix *B){
                 C->elements.double_prec=(double*)malloc(sizeof(double)*C->rows*C->cols);
                 break;
         }
-        
+
         if((A->MType != col_vector && B->MType != col_vector) || (A->MType == col_vector && B->MType == col_vector) || (A->MType == scalar || B->MType == scalar)){
             for(int i=0; i< size(C); i++)
                 C->elements.short_int[i] = A->elements.short_int[(i)%size(A)] + B->elements.short_int[(i)%size(B)];
@@ -335,6 +333,7 @@ Matrix *matrix_sum(Matrix *A, Matrix *B){
                 for(int j=0; j< C->cols; j++) 
                      C->elements.short_int[(i*C->cols + j)] = non_col->elements.short_int[(i*C->cols + j)%size(C)] + v_col->elements.short_int[i]; 
         }
+
         print_matrix(C);
         return C;
     }
@@ -400,4 +399,140 @@ void print_info(Matrix *A) {
         A->name,
         next);
     }
+}
+
+Matrix *matrix_prod(Matrix *A, Matrix *B) {
+    Matrix *C = (Matrix *)malloc(sizeof(Matrix));
+    DataType tmp_datatype;
+    enum casted {Acasted, Bcasted} casted;
+    Pointer sum;
+
+    if (rccmp(A, B)) {
+        C->rows = A->rows;
+        C->cols = B->cols;
+
+        if(A->datatype > B->datatype) {
+            C->datatype = A->datatype;
+            matrix_typeconv(A, C->datatype);
+            tmp_datatype = B->datatype;
+            casted = Bcasted;
+        
+        } else {
+            C->datatype = B->datatype;
+            tmp_datatype = A->datatype;
+            matrix_typeconv(B, C->datatype);
+            casted = Acasted;
+        }
+        
+        C->MType = matrix_typeof(C);
+        strcpy(C->name, "ans");
+
+        switch (C->datatype) {
+
+            case short_int:
+            C->elements.short_int = (short int *)malloc(sizeof(short int)*size(C));
+            sum.short_int = (short int*)malloc(sizeof(short int));
+
+                for(int i = 0; i < C->rows; i++) {
+                    for (int j = 0; j < C->cols; j++) {
+                        *sum.short_int = 0;
+
+                        for( int k = 0; k < A->cols; k++) {
+                            *sum.short_int += A->elements.short_int[i*C->cols + k] * B->elements.short_int[k*C->cols + j];
+                        }
+                        C->elements.short_int[i*C->cols + j] = *sum.short_int;
+                    }
+                }
+                break;
+
+            case integer:
+            C->elements.integer = (int *)malloc(sizeof(int)*size(C));
+            sum.integer = (int*)malloc(sizeof(int));
+                for(int i = 0; i < C->rows; i++) {
+                    for (int j = 0; j < C->cols; j++) {
+                        *sum.integer = 0;
+                        for(int k = 0; k < A->cols; k++) {
+                            *sum.integer += A->elements.integer[i*C->cols + k] * B->elements.integer[k*C->cols + j];
+                        }
+                        C->elements.integer[i*C->cols + j] = *sum.integer;
+                    }
+                }
+            break;
+
+            case floating:
+            C->elements.floating = (float *)malloc(sizeof(float)*size(C));
+            sum.floating = (float*)malloc(sizeof(float));
+                for(int i = 0; i < C->rows; i++) {
+                    for (int j = 0; j < C->cols; j++) {
+                        *sum.floating = 0;
+                        for( int k = 0; k < A->cols; k++) {
+                            *sum.floating += A->elements.floating[i*C->cols + k] * B->elements.floating[k*C->cols + j];
+                        }
+                        C->elements.floating[i*C->cols + j] = *sum.floating;
+                    }
+                }
+                break;
+            case double_prec:
+            C->elements.double_prec = (double *)malloc(sizeof(double)*size(C));
+            sum.double_prec = (double*)malloc(sizeof(double));
+                for(int i = 0; i < C->rows; i++) {
+                    for (int j = 0; j < C->cols; j++) {
+                        *sum.double_prec = 0;
+                        for( int k = 0; k < A->cols; k++) {
+                            *sum.double_prec += A->elements.double_prec[i*C->cols + k] * B->elements.double_prec[k*C->cols + j];
+                        }
+                        C->elements.double_prec[i*C->cols + j] = *sum.double_prec;
+                    }
+                }
+                break;
+            }
+    }
+    else if (A->MType == scalar || B->MType == scalar) {
+
+        switch(C->datatype) {
+            
+            case short_int:
+            C->elements.short_int = (short int *)malloc(sizeof(short int)*size(C));
+                for(int i = 0; i < C->rows; i++) {
+                    for(int j = 0; j < C->cols; j++) {
+                        C->elements.short_int[i] = A->elements.short_int[(i)%size(A)] * B->elements.short_int[(i)%size(B)];
+                    }
+                }
+                break;
+
+            case integer:
+            C->elements.integer = (int *)malloc(sizeof(int)*size(C));
+                for(int i = 0; i < C->rows; i++) {
+                    for(int j = 0; j < C->cols; j++) {
+                        C->elements.integer[i] = A->elements.integer[(i)%size(A)] * B->elements.integer[(i)%size(B)];
+                    }
+                }
+                break;
+
+            case floating:
+            C->elements.floating = (float *)malloc(sizeof(float)*size(C));
+                for(int i = 0; i < C->rows; i++) {
+                    for(int j = 0; j < C->cols; j++) {
+                        C->elements.floating[i] = A->elements.floating[(i)%size(A)] * B->elements.floating[(i)%size(B)];
+                    }
+                }
+                break;
+
+            case double_prec:
+            C->elements.double_prec = (double *)malloc(sizeof(double)*size(C));
+                for(int i = 0; i < C->rows; i++) {
+                    for(int j = 0; j < C->cols; j++) {
+                        C->elements.double_prec[i] = A->elements.double_prec[(i)%size(A)] * B->elements.double_prec[(i)%size(B)];
+                    }
+                }
+                break;
+        }
+        
+    } else return NULL;
+
+    if(casted == Acasted) {
+        matrix_typeconv(A, tmp_datatype);
+    } else matrix_typeconv(B, tmp_datatype);
+
+    return C;
 }

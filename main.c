@@ -7,7 +7,7 @@ int main() {
 
     //default debug matrices
 
-    int v1[] =
+    short int v1[] =
     {
         1,2,3,
         4,5,6,
@@ -23,10 +23,10 @@ int main() {
 
     Pointer v, w;
 
-    v.integer = v1;
+    v.short_int = v1;
     w.short_int = w1;
 
-    Matrix *A = new_matrix("A", 3, 3, integer);
+    Matrix *A = new_matrix("A", 3, 3, short_int);
     Matrix *B = new_matrix("B", 3, 3, short_int);
     
     init_elements(A, v);
@@ -42,7 +42,7 @@ int main() {
     printf("\n");
     print_list(head);
 */
-
+    DataType t;
     char c;
     char cc[16];
     char m1[16];
@@ -51,9 +51,20 @@ int main() {
         printf("\n>> ");
         scanf(" %c", &c);
         switch (c) {
+            case 'x':
+                printf("\nproduct:");
+                scanf("%s%s", m1, m2);
+                push_matrix(&head, matrix_prod(get_matrix(head, m1), get_matrix(head, m2)));
+                print_matrix(get_matrix(head, "ans"));
+                break;
+            case 't':
+                printf("\ntypeconv: ");
+                scanf("%s%u", cc, &t);
+                matrix_typeconv(get_matrix(head, cc), t);
+                break;
             case 'c':
-                printf("\nInsert name of matrix to clone and new one: ");
-                scanf("%s %s", m1, m2);
+                printf("\nclone: ");
+                scanf("%s%s", m1, m2);
                 clone_matrix(head, get_matrix(head, m1), m2);
                 break;
             case 'r':

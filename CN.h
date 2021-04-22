@@ -58,4 +58,5 @@ Matrix *prompt_matrix();                                        //prompt for a n
 void matrix_typeconv(Matrix* A, DataType);                              //casts a matrix type to the argument
 
 //matrix operations
-Matrix *matrix_sum(Matrix *A, Matrix *B);                    //sum two matrices A and B
+Matrix *matrix_sum(Matrix *A, Matrix *B);                       //sum two matrices A and B
+Matrix *matrix_prod(Matrix *A, Matrix *B);                    
