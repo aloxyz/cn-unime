@@ -385,15 +385,19 @@ char *str_matrix_typeof(Matrix *A) {
 }
 
 void print_info(Matrix *A) {
-    char *next = "NULL";
-    if(A->next != NULL) strcpy(next, A->next->name);
+    if(A == NULL) printf("There is no such matrix");
+    else{
+        char *next = (char*)malloc(sizeof(char)*16);
+        if(A->next != NULL) strcpy(next, A->next->name);
+        else strcpy(next, "NULL");
 
-    printf("%s: %dx%d %s %s, %s->%s",
-    A->name,
-    A->rows,
-    A->cols,
-    str_matrix_typeof(A),
-    str_matrix_MTypeof(A),
-    A->name,
-    next);
+        printf("%s: %dx%d %s %s, %s->%s",
+        A->name,
+        A->rows,
+        A->cols,
+        str_matrix_typeof(A),
+        str_matrix_MTypeof(A),
+        A->name,
+        next);
+    }
 }

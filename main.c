@@ -51,10 +51,15 @@ int main() {
         printf("\n>> ");
         scanf(" %c", &c);
         switch (c) {
+            case 'c':
+                printf("\nInsert name of matrix to clone and new one: ");
+                scanf("%s %s", m1, m2);
+                clone_matrix(head, get_matrix(head, m1), m2);
+                break;
             case 'r':
                 printf("\nremove: ");
                 scanf("%s", cc);
-                remove_matrix(&head, cc);
+                remove_matrix(&head, get_matrix(head, cc));
                 printf("\ndone");
                 break;
             case 'i':

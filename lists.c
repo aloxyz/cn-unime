@@ -9,10 +9,10 @@ Matrix *get_matrix(Matrix *head, char *name) {
 }
 
 Matrix *get_last(Matrix *head){
-    Matrix *tmp = head;
-    while (tmp->next != NULL) tmp = tmp->next;
+    if(head != NULL)
+        while (head->next != NULL) head = head->next;
 
-    return tmp;
+    return head;
 }
 
 int llen(Matrix *head) {
@@ -26,10 +26,14 @@ int llen(Matrix *head) {
 }
 
 void push_matrix(Matrix **head, Matrix *new) {
+
+    remove_matrix(head, get_matrix(*head, new->name));  
+
     if (*head == NULL) *head = new;
     else get_last(*head)->next = new;
     
     new->next = NULL;
+    
 }
 
 void print_list(Matrix *head){
@@ -44,17 +48,23 @@ void print_list(Matrix *head){
     printf("\n");
 }
 
-void remove_matrix(Matrix **head, char *name) {
-    Matrix *prec = *head;
-    Matrix *current = *head;
-    while(current != NULL && strcmp(name, current->name) != 0) {
-        prec = current;
-        current = current->next;
+void remove_matrix(Matrix **head, Matrix *target) {
+    if(*head != NULL && target != NULL){
+        Matrix *prec = *head;
+        Matrix *current = *head;
+        while(current != NULL && current != target) {
+            prec = current;
+            current = current->next;
+        }
+        if(current != NULL){                                    //checks if target matrix was found
+            if(current == *head) *head = current->next;         //elimination of first element
+            else{
+                if(current->next == NULL) prec->next = NULL;    //elimination of last element
+                else prec->next = current->next;                //elimination of middle element
+                free(current);
+            }
+        }
     }
-    if(current == *head) *head = current->next;
-    if(current->next == NULL) prec->next = NULL;
-    else prec->next = current->next; 
-    free(current);
 }
 
 void rename_matrix(char *name, Matrix *A) {
@@ -63,6 +73,6 @@ void rename_matrix(char *name, Matrix *A) {
 
 void clone_matrix(Matrix *head, Matrix *A, char* name) {
     push_matrix(&head, A);
-    rename_matrix(name, get_last(head));
+    //rename_matrix(name, get_last(head));
 }
 
