@@ -47,7 +47,7 @@ char *str_matrix_typeof(Matrix *A);
 void print_info(Matrix *A);
 
 //matrix control functions
-void cast_matrix(Matrix* A, DataType);                              //casts a matrix type to the argument
+void matrix_typeconv(Matrix* A, DataType);                              //casts a matrix type to the argument
 void init_elements(Matrix *A, Pointer v);                                  
 Matrix *new_matrix(char *name, int rows, int cols, DataType t);     //creates a new matrix
 

@@ -304,8 +304,8 @@ Matrix *matrix_sum(Matrix *A, Matrix *B){
         if(A->datatype > B->datatype) C->datatype = A->datatype; else C->datatype = B->datatype;
         C->MType = matrix_typeof(C);
         strcpy(C->name, "ans");
-        cast_matrix(A, C->datatype);
-        cast_matrix(B, C->datatype);
+        matrix_typeconv(A, C->datatype);
+        matrix_typeconv(B, C->datatype);
         
         switch(C->datatype){
             case short_int:

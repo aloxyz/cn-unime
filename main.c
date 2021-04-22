@@ -36,9 +36,9 @@ int main() {
     push_matrix(&head, B);
 
     //default debug matrices
-
-/*    printf("removing %s", A->name);
-    remove_matrix(head, "A");
+/*
+    printf("removing %s", B->name);
+    remove_matrix(head, "B");
     printf("\n");
     print_list(head);
 */
@@ -51,6 +51,12 @@ int main() {
         printf("\n>> ");
         scanf(" %c", &c);
         switch (c) {
+            case 'r':
+                printf("\nremove: ");
+                scanf("%s", cc);
+                remove_matrix(head, cc);
+                printf("\ndone");
+                break;
             case 'i':
                 printf("\ninfo: ");
                 scanf("%s", cc);
@@ -65,7 +71,7 @@ int main() {
                 push_matrix(&head, prompt_matrix());
                 break;
             case 'p':
-                printf("\nvariable name: ");
+                printf("\nprint: ");
                 scanf(" %s", cc);
                 print_matrix(get_matrix(head, cc));
                 break;

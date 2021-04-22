@@ -37,11 +37,22 @@ void print_list(Matrix *head){
     if(head == NULL) printf("none\n");
     else {
         while(head != NULL) {
-            printf("%s, ", head->name);
+            printf("%s ", head->name);
             head = head->next;
         }
     }
     printf("\n");
+}
+
+void remove_matrix(Matrix *head, char *name) {
+    Matrix *tmp = head->next;
+    Matrix *match = get_matrix(head, name);
+    while(tmp->next != NULL && strcmp(name, tmp->name) != 0) {
+        tmp = tmp->next;
+    }
+    if(match->next != NULL) tmp->next = match->next;
+    match->next = NULL;
+    free(match);
 }
 
 void rename_matrix(char *name, Matrix *A) {
