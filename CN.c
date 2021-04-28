@@ -195,103 +195,81 @@ Matrix *prompt_matrix() {
 
 }
 
-void matrix_typeconv(Matrix *A, DataType type){
-    Pointer tmp;
-    
-    switch(A->datatype){
-        case short_int:
-            tmp.short_int = (short int*)malloc(sizeof(short int)*size(A));
-            for(int i=0; i<size(A); i++){
-                tmp.short_int[i] = A->elements.short_int[i];
-            }
-            switch(type){
-                case short_int: break;
-                case integer: 
-                            A->elements.integer = (int*)malloc(sizeof(int)*A->cols*A->rows);
-                            for(int i=0; i<size(A); i++) A->elements.integer[i] = (int)tmp.short_int[i];
-                            break;
-                case floating:
-                            A->elements.floating = (float*)malloc(sizeof(float)*A->cols*A->rows);
-                            for(int i=0; i<size(A); i++) A->elements.floating[i] = (float)tmp.short_int[i];
-                            break;
-                case double_prec:
-                            A->elements.double_prec = (double*)malloc(sizeof(double)*A->cols*A->rows);
-                            for(int i=0; i<size(A); i++) A->elements.double_prec[i] = (double)tmp.short_int[i];
-                            break;
-            }
-            free(tmp.floating);
-            break;
-
-        case integer:
-            tmp.integer = (int*)malloc(sizeof(int)*size(A));
-            for(int i=0; i<size(A); i++)
-                    tmp.integer[i] = A->elements.integer[i];
-
-            switch(type){
-                case short_int: 
-                            A->elements.short_int = (short int*)malloc(sizeof(int)*A->cols*A->rows);
-                            for(int i=0; i<size(A); i++) A->elements.short_int[i] = (short int)tmp.integer[i];
-                            break;
-                case integer: break;
-                case floating:
-                             A->elements.floating = (float*)malloc(sizeof(float)*A->cols*A->rows);
-                            for(int i=0; i<size(A); i++) A->elements.floating[i] = (float)tmp.integer[i];
-                           break;
-                case double_prec:
-                            A->elements.double_prec = (double*)malloc(sizeof(double)*A->cols*A->rows);
-                            for(int i=0; i<size(A); i++) A->elements.double_prec[i] = (double)tmp.integer[i];
-            }
-            free(tmp.integer);            
-            break;
-
-        case floating:
-            tmp.floating = (float*)malloc(sizeof(float)*size(A));        
-            for(int i=0; i<size(A); i++)
-                    tmp.floating[i] = A->elements.floating[i];
-
-                switch(type){
-                    case short_int: 
-                                A->elements.short_int = (short int*)malloc(sizeof(short int)*A->cols*A->rows);
-                                for(int i=0; i<size(A); i++) A->elements.short_int[i] = (short int)tmp.floating[i];
-                                break;
-                    case integer:
-                                A->elements.floating = (float*)malloc(sizeof(float)*A->cols*A->rows);
-                                for(int i=0; i<size(A); i++) A->elements.integer[i] = (int)tmp.floating[i];
-                                break;
-                    case floating: break;
-                    case double_prec:
-                                A->elements.double_prec = (double*)malloc(sizeof(double)*A->cols*A->rows);
-                                for(int i=0; i<size(A); i++) A->elements.double_prec[i] = (double)tmp.floating[i];
-            }
-            free(tmp.integer);            
-            break;
-
-        case double_prec:
-            tmp.double_prec = (double*)malloc(sizeof(double)*size(A));
-                    for(int i=0; i<size(A); i++) printf("%lf", A->elements.double_prec[i]); //DEBUGGING
-
-            for(int i=0; i<size(A); i++)
-                    tmp.double_prec[i] = A->elements.double_prec[i];
-            for(int i=0; i<size(A); i++) printf("%lf", tmp.double_prec[i]); //DEBUGGING
-                switch(type){
-                    case short_int: 
-                                A->elements.short_int = (short int*)malloc(sizeof(short int)*A->cols*A->rows);
-                                for(int i=0; i<size(A); i++) A->elements.short_int[i] = (short int)tmp.double_prec[i];
-                                break;
-                    case integer:
-                                A->elements.integer = (int*)malloc(sizeof(int)*A->cols*A->rows);
-                                for(int i=0; i<size(A); i++) A->elements.integer[i] = (int)tmp.double_prec[i];
-                                break;
-                    case floating:
-                                A->elements.floating = (float*)malloc(sizeof(float)*A->cols*A->rows);
-                                for(int i=0; i<size(A); i++) A->elements.floating[i] = (float)tmp.double_prec[i];
-                    case double_prec: break;
-                }    
-                free(tmp.double_prec);
-                break;
-                
+#define CONVERT(FROM, TO)                                                      \
+  tmp.FROM = malloc(sizeof(*tmp.FROM) * size(A));                              \
+  for (int i = 0; i < size(A); i++)                                            \
+    tmp.FROM[i] = A->elements.FROM[i];                                         \
+                                                                               \
+  A->elements.TO = malloc(sizeof(*A->elements.TO) * size(A));                  \
+  for (int i = 0; i < size(A); i++)                                            \
+    A->elements.TO[i] = tmp.FROM[i];                                           \
+  free(tmp.FROM);                                                              \
+  A->datatype = TO;                                                            \
+ 
+void matrix_typeconv(Matrix *A, DataType to) {
+  Pointer tmp;
+  switch (to) {
+  case short_int:
+    switch (A->datatype) {
+    case short_int:
+      break;
+    case integer:
+      CONVERT(integer, short_int)
+      break;
+    case floating:
+      CONVERT(integer, short_int)
+      break;
+    case double_prec:
+      CONVERT(double_prec, short_int)
     }
-    A->datatype = type;
+    break;
+
+  case integer:
+    switch (A->datatype) {
+    case short_int:
+      CONVERT(short_int, integer);
+      break;
+    case integer:
+      break;
+    case floating:
+      CONVERT(floating, integer)
+      break;
+    case double_prec:
+      CONVERT(double_prec, integer)
+    }
+    break;
+
+  case floating:
+    switch (A->datatype) {
+    case short_int:
+      CONVERT(short_int, floating)
+      break;
+    case integer:
+      CONVERT(integer, floating)
+      break;
+    case floating:
+      break;
+    case double_prec:
+      CONVERT(double_prec, floating)
+    }
+    break;
+
+  case double_prec:
+    switch (A->datatype) {
+    case short_int:
+      CONVERT(short_int, double_prec)
+      break;
+    case integer:
+      CONVERT(integer, double_prec)
+      break;
+    case floating:
+      CONVERT(floating, double_prec)
+      break;
+    case double_prec:
+      break;
+    }
+    break;
+  }
 }
 
 Matrix *matrix_sum(Matrix *A, Matrix *B){
