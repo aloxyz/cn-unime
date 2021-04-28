@@ -35,6 +35,33 @@ int main() {
     push_matrix(&head, A);
     push_matrix(&head, B);
 
+    short int small[] = {1,2,3,4,5,6};
+    int medium[] = {1,2,3,4,5,6};
+    float   floatin[] = {1,2,3,4,5,6};
+    double doublem[] = {1,2,3,4,5,6};
+
+    Matrix *C = new_matrix("C", 3, 2, short_int);
+    Matrix *D = new_matrix("D", 3, 2, integer);
+    Matrix *E = new_matrix("E", 2, 3, floating);
+    Matrix *F = new_matrix("F", 2, 3, double_prec);
+    
+    Pointer small1, medium1, floatin1, doublem1;
+
+    small1.short_int = small;
+    medium1.integer = medium;
+    floatin1.floating = floatin;
+    doublem1.double_prec = doublem;
+
+    init_elements(C, small1);
+    init_elements(D, medium1);
+    init_elements(E, floatin1);
+    init_elements(F, doublem1);
+
+    push_matrix(&head, C);
+    push_matrix(&head, D);
+    push_matrix(&head, E);
+    push_matrix(&head, F);
+
     //default debug matrices
 /*
     printf("removing %s", B->name);
