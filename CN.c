@@ -152,7 +152,6 @@ void print_matrix(Matrix *A){
             case double_prec:   PRINT_MATRIX(A, "%lf ", double_prec);    break;
         }
     }
-
 }
 
 Matrix *prompt_matrix() {
@@ -223,52 +222,56 @@ void matrix_typeconv(Matrix *A, DataType to) {
         }
     }
 }
-
+#define ARITHMETIC_SUM(TYPE)                                                                                                                                                    \
+C->elements.TYPE = malloc(sizeof(*C->elements.TYPE)*size(C));                                                                                                           \
+if((A->MType != col_vector && B->MType != col_vector) || (A->MType == col_vector && B->MType == col_vector) || (A->MType == scalar || B->MType == scalar))                      \
+    for(int i=0; i< size(C); i++)                                                                                                                                               \
+        C->elements.TYPE[i] = A->elements.TYPE[(i)%size(A)] + B->elements.TYPE[(i)%size(B)];                                                                                    \
+    else {                                                                                                                                                                      \
+        Matrix *non_col, *v_col;                                                                                                                                                \
+        if(B->MType == col_vector) {non_col = A; v_col = B;} else {non_col = B; v_col = A;}                                                                                     \
+        for(int i=0; i< C->rows; i++)                                                                                                                                           \
+            for(int j=0; j< C->cols; j++)                                                                                                                                       \
+                C->elements.TYPE[(i*C->cols + j)] = non_col->elements.TYPE[(i*C->cols + j)%size(C)] + v_col->elements.TYPE[i];                                                  \
+        }                                                                                                                                                                       \
+        
 Matrix *matrix_sum(Matrix *A, Matrix *B){
-    Matrix *C=(Matrix*)malloc(sizeof(Matrix));
-    if(summable(A, B)){
+    if(A!= NULL && B!=NULL && summable(A, B)){
+        Matrix *C=(Matrix*)malloc(sizeof(Matrix));        
+        DataType tmp_datatype;
+        enum casted { Acasted, Bcasted } casted;
+
         if(A->rows > B ->rows) C->rows = A->rows; else C->rows = B->rows;
         if(A->cols > B ->cols) C->cols = A->cols; else C->cols = B->cols;
-        if(A->datatype > B->datatype) C->datatype = A->datatype; else C->datatype = B->datatype;
         C->MType = matrix_typeof(C);
         strcpy(C->name, "ans");
-        matrix_typeconv(A, C->datatype);
-        matrix_typeconv(B, C->datatype);
         
-        switch(C->datatype){
-            case short_int:
-                C->elements.short_int=(short int*)malloc(sizeof(short int)*C->rows*C->cols);
-                break;
-            case integer:
-                C->elements.integer=(int*)malloc(sizeof(int)*C->rows*C->cols);
-                break;
-
-            case floating:
-                C->elements.floating=(float*)malloc(sizeof(float)*C->rows*C->cols);
-                break;
-
-            case double_prec:
-                C->elements.double_prec=(double*)malloc(sizeof(double)*C->rows*C->cols);
-                break;
-        }
-
-        if((A->MType != col_vector && B->MType != col_vector) || (A->MType == col_vector && B->MType == col_vector) || (A->MType == scalar || B->MType == scalar)){
-            for(int i=0; i< size(C); i++)
-                C->elements.short_int[i] = A->elements.short_int[(i)%size(A)] + B->elements.short_int[(i)%size(B)];
-        }
+        if (A->datatype > B->datatype) {
+            C->datatype = A->datatype;
+            tmp_datatype = B->datatype;
+            matrix_typeconv(B, C->datatype);
+            casted = Bcasted;
+        } 
         else {
-        Matrix *non_col, *v_col;
-        if(B->MType == col_vector) {non_col = A; v_col = B;} else {non_col = B; v_col = A;} 
-            for(int i=0; i< C->rows; i++)
-                for(int j=0; j< C->cols; j++) 
-                     C->elements.short_int[(i*C->cols + j)] = non_col->elements.short_int[(i*C->cols + j)%size(C)] + v_col->elements.short_int[i]; 
+            C->datatype = B->datatype;
+            tmp_datatype = A->datatype;
+            matrix_typeconv(A, C->datatype);
+            casted = Acasted;
+        }
+
+        switch(C->datatype){
+            case short_int:     ARITHMETIC_SUM(short_int);      break;
+            case integer:       ARITHMETIC_SUM(integer);        break;         
+            case floating:      ARITHMETIC_SUM(floating);       break;             
+            case double_prec:   ARITHMETIC_SUM(double_prec);    break;          
         }
 
         print_matrix(C);
+        if (casted == Acasted)  matrix_typeconv(A, tmp_datatype);
+        else    matrix_typeconv(B, tmp_datatype);        
         return C;
     }
     else{
-        
         return NULL;
     }
 }
@@ -331,7 +334,7 @@ void print_info(Matrix *A) {
     }
 }
 
-#define arithmetic_prod(TYPE)                                                                                   \
+#define ARITHMETIC_PROD(TYPE)                                                                                   \
   if (rccmp(A, B)) {                                                                                            \
     Pointer sum;                                                                                                \
     C->rows = A->rows;                                                                                          \
@@ -359,35 +362,36 @@ void print_info(Matrix *A) {
                                                                                                                
 
 Matrix *matrix_prod(Matrix *A, Matrix *B) {
-  if (rccmp(A, B) || A->MType == scalar || B->MType) {
+  if (A != NULL && B!= NULL && (rccmp(A, B) || A->MType == scalar || B->MType)) {
     Matrix *C = (Matrix *)malloc(sizeof(Matrix));
     DataType tmp_datatype;
     enum casted { Acasted, Bcasted } casted;
 
     if (A->datatype > B->datatype) {
-      C->datatype = A->datatype;
-      matrix_typeconv(B, C->datatype);
-      tmp_datatype = B->datatype;
-      casted = Bcasted;
+        C->datatype = A->datatype;
+        tmp_datatype = B->datatype;
+        matrix_typeconv(B, C->datatype);
+        casted = Bcasted;
     } 
     else {
-      C->datatype = B->datatype;
-      tmp_datatype = A->datatype;
-      matrix_typeconv(A, C->datatype);
-      casted = Acasted;
+        C->datatype = B->datatype;
+        tmp_datatype = A->datatype;
+        matrix_typeconv(A, C->datatype);
+        casted = Acasted;
     }
 
     switch (C->datatype) {
-    case short_int:     arithmetic_prod(short_int)      break;
-    case integer:       arithmetic_prod(integer)        break;
-    case floating:      arithmetic_prod(floating)       break;
-    case double_prec:   arithmetic_prod(double_prec)    break;
+    case short_int:     ARITHMETIC_PROD(short_int)      break;
+    case integer:       ARITHMETIC_PROD(integer)        break;
+    case floating:      ARITHMETIC_PROD(floating)       break;
+    case double_prec:   ARITHMETIC_PROD(double_prec)    break;
     }
 
     C->MType = matrix_typeof(C);
     strcpy(C->name, "ans");
     if (casted == Acasted)  matrix_typeconv(A, tmp_datatype);
     else    matrix_typeconv(B, tmp_datatype);
+    print_matrix(C);
     return C;
   }
   return NULL;
