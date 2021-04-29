@@ -78,7 +78,7 @@ int main() {
         printf("\n>> ");
         scanf(" %c", &c);
         switch (c) {
-            case 'x':
+            case '*':
                 printf("\nproduct:");
                 scanf("%s%s", m1, m2);
                 push_matrix(&head, matrix_prod(get_matrix(head, m1), get_matrix(head, m2)));
@@ -105,7 +105,7 @@ int main() {
                 scanf("%s", cc);
                 print_info(get_matrix(head, cc));
                 break;
-            case 's':
+            case '+':
                 printf("\nsum: ");
                 scanf("%s%s", m1, m2);
                 push_matrix(&head, matrix_sum(get_matrix(head, m1), get_matrix(head, m2)));

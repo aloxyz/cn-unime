@@ -21,7 +21,8 @@ int rccmp(Matrix *A, Matrix *B){
 int summable(Matrix *A, Matrix *B){
     return ((sizecmp(A, B) || 
     (A->MType==scalar) || B->MType == scalar) || 
-    ((is_vector(A) || is_vector(B)) && (A->rows == B->rows || A->cols == B->cols))
+    ((is_vector(A) || is_vector(B)) && (A->rows == B->rows || A->cols == B->cols)) ||
+    ((is_vector(A) && is_vector(B)) && (A->rows == B->cols || A->cols == B->rows)) 
     );
 }
 
@@ -174,8 +175,11 @@ void matrix_typeconv(Matrix *A, DataType to) {
     }
 }
 #define ARITHMETIC_SUM(TYPE)                                                                                                                                                    \
-C->elements.TYPE = malloc(sizeof(*C->elements.TYPE)*size(C));                                                                                                           \
-if((A->MType != col_vector && B->MType != col_vector) || (A->MType == col_vector && B->MType == col_vector) || (A->MType == scalar || B->MType == scalar))                      \
+C->elements.TYPE = malloc(sizeof(*C->elements.TYPE)*size(C));                                                                                                                   \
+if( (A->MType != col_vector && B->MType != col_vector) ||                                                                                                                       \
+    (A->MType == col_vector && B->MType == col_vector) ||                                                                                                                       \
+    (A->MType == scalar || B->MType == scalar))                                                                                                                                 \
+                                                                                                                                                                                \
     for(int i=0; i< size(C); i++)                                                                                                                                               \
         C->elements.TYPE[i] = A->elements.TYPE[(i)%size(A)] + B->elements.TYPE[(i)%size(B)];                                                                                    \
     else {                                                                                                                                                                      \
@@ -183,12 +187,12 @@ if((A->MType != col_vector && B->MType != col_vector) || (A->MType == col_vector
         if(B->MType == col_vector) {non_col = A; v_col = B;} else {non_col = B; v_col = A;}                                                                                     \
         for(int i=0; i< C->rows; i++)                                                                                                                                           \
             for(int j=0; j< C->cols; j++)                                                                                                                                       \
-                C->elements.TYPE[(i*C->cols + j)] = non_col->elements.TYPE[(i*C->cols + j)%size(C)] + v_col->elements.TYPE[i];                                                  \
+                C->elements.TYPE[(i*C->cols + j)] = non_col->elements.TYPE[(i*C->cols + j)%size(non_col)] + v_col->elements.TYPE[i];                                                  \
         }                                                                                                                                                                       \
         
 Matrix *matrix_sum(Matrix *A, Matrix *B){
     if(A!= NULL && B!=NULL && summable(A, B)){
-        Matrix *C=(Matrix*)malloc(sizeof(Matrix));        
+        Matrix *C=malloc(sizeof(Matrix));        
         DataType tmp_datatype;
         enum casted { Acasted, Bcasted } casted;
 
