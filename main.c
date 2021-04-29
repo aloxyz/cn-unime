@@ -108,7 +108,7 @@ int main() {
             case 's':
                 printf("\nsum: ");
                 scanf("%s%s", m1, m2);
-                matrix_sum(get_matrix(head, m1), get_matrix(head, m2));
+                push_matrix(&head, matrix_sum(get_matrix(head, m1), get_matrix(head, m2)));
                 break;
             case 'n':
                 push_matrix(&head, prompt_matrix());
