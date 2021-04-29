@@ -44,6 +44,7 @@ int summable(Matrix *A, Matrix *B);                             //returns 1 if t
 MatrixType matrix_typeof(Matrix *A);                            //returns MatrixType 
 char *str_matrix_MTypeof(Matrix *A);
 char *str_matrix_typeof(Matrix *A);
+DataType datatype_matrix_typeof(char *datatype);
 void print_info(Matrix *A);
 
 //matrix control functions

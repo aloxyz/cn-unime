@@ -78,8 +78,8 @@ Matrix *new_matrix(char *name, int rows, int cols, DataType t){
     A->MType = matrix_typeof(A);
 
     if(t > 4 || t < 1) {
-        A->datatype = 4;
-        perror("Invalid datatype, defaulting to double_prec\n"); 
+        A->datatype = 2;
+        perror("Invalid datatype, defaulting to integer\n"); 
     } else { A->datatype = t; }
     
     return A;
@@ -107,17 +107,17 @@ void print_matrix(Matrix *A){
 }
 
 Matrix *prompt_matrix() {
-    int rows, cols, t;
+    int rows, cols;
     char name[16];
-    printf("name: ");
-    scanf("%s", name);
-    printf("\nrows and columns:\n>> ");
-    scanf("%d%d", &rows, &cols);
-    printf("\ndatatype:\n1.short_int\n2.integer\n3.floating\n4.double_prec\n>> ");
-    scanf("%d", &t);
-    Matrix *tmp = new_matrix(name, rows, cols, t);
-    printf("\nInsert elements:");
-    prompt_init_elements(tmp);
+    char datatype[16];
+    printf("\ndatatype: ");             scanf("%s", datatype);
+    printf("name: ");                   scanf("%s", name);
+    printf("\nrows and columns:  ");    scanf("%d%d", &rows, &cols);
+
+    Matrix *tmp = new_matrix(name, rows, cols, datatype_matrix_typeof(datatype));
+    
+    printf("\nInsert elements:");       prompt_init_elements(tmp);
+    
     print_matrix(tmp);
     return tmp;
 
@@ -174,21 +174,21 @@ void matrix_typeconv(Matrix *A, DataType to) {
         }
     }
 }
-#define ARITHMETIC_SUM(TYPE)                                                                                                                                                    \
-C->elements.TYPE = malloc(sizeof(*C->elements.TYPE)*size(C));                                                                                                                   \
-if( (A->MType != col_vector && B->MType != col_vector) ||                                                                                                                       \
-    (A->MType == col_vector && B->MType == col_vector) ||                                                                                                                       \
-    (A->MType == scalar || B->MType == scalar))                                                                                                                                 \
-                                                                                                                                                                                \
-    for(int i=0; i< size(C); i++)                                                                                                                                               \
-        C->elements.TYPE[i] = A->elements.TYPE[(i)%size(A)] + B->elements.TYPE[(i)%size(B)];                                                                                    \
-    else {                                                                                                                                                                      \
-        Matrix *non_col, *v_col;                                                                                                                                                \
-        if(B->MType == col_vector) {non_col = A; v_col = B;} else {non_col = B; v_col = A;}                                                                                     \
-        for(int i=0; i< C->rows; i++)                                                                                                                                           \
-            for(int j=0; j< C->cols; j++)                                                                                                                                       \
-                C->elements.TYPE[(i*C->cols + j)] = non_col->elements.TYPE[(i*C->cols + j)%size(non_col)] + v_col->elements.TYPE[i];                                                  \
-        }                                                                                                                                                                       \
+#define ARITHMETIC_SUM(TYPE)                                                                                                        \
+C->elements.TYPE = malloc(sizeof(*C->elements.TYPE)*size(C));                                                                       \
+if( (A->MType != col_vector && B->MType != col_vector) ||                                                                           \
+    (A->MType == col_vector && B->MType == col_vector) ||                                                                           \
+    (A->MType == scalar || B->MType == scalar))                                                                                     \
+                                                                                                                                    \
+    for(int i=0; i< size(C); i++)                                                                                                   \
+        C->elements.TYPE[i] = A->elements.TYPE[(i)%size(A)] + B->elements.TYPE[(i)%size(B)];                                        \
+    else {                                                                                                                          \
+        Matrix *non_col, *v_col;                                                                                                    \
+        if(B->MType == col_vector) {non_col = A; v_col = B;} else {non_col = B; v_col = A;}                                         \
+        for(int i=0; i< C->rows; i++)                                                                                               \
+            for(int j=0; j< C->cols; j++)                                                                                           \
+                C->elements.TYPE[(i*C->cols + j)] = non_col->elements.TYPE[(i*C->cols + j)%size(non_col)] + v_col->elements.TYPE[i];\
+        }                                                                                                                           \
         
 Matrix *matrix_sum(Matrix *A, Matrix *B){
     if(A!= NULL && B!=NULL && summable(A, B)){
@@ -269,6 +269,15 @@ char *str_matrix_typeof(Matrix *A) {
         return "double_prec";
         break;
     }
+}
+
+DataType datatype_matrix_typeof(char *datatype) {
+    if(strcmp(datatype, "short_int") == 0)  return short_int;
+    if(strcmp(datatype, "int") == 0)        return integer;
+    if(strcmp(datatype, "float") == 0)      return floating;
+    if(strcmp(datatype, "double") == 0)     return double_prec;
+    printf("Invalid datatype, defaulting to integer\n");
+    return integer;
 }
 
 void print_info(Matrix *A) {
