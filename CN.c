@@ -326,7 +326,9 @@ void print_info(Matrix *A) {
                                                                                                                
 
 Matrix *matrix_prod(Matrix *A, Matrix *B) {
-  if (A != NULL && B!= NULL && (rccmp(A, B) || A->MType == scalar || B->MType)) {
+  if (( (A != NULL && B!= NULL) && 
+        (rccmp(A, B) || A->MType == scalar || B->MType == scalar))) {
+
     Matrix *C = (Matrix *)malloc(sizeof(Matrix));
     DataType tmp_datatype;
     enum casted { Acasted, Bcasted } casted;
@@ -355,7 +357,6 @@ Matrix *matrix_prod(Matrix *A, Matrix *B) {
     strcpy(C->name, "ans");
     if (casted == Acasted)  matrix_typeconv(A, tmp_datatype);
     else    matrix_typeconv(B, tmp_datatype);
-    print_matrix(C);
     return C;
   }
   return NULL;
