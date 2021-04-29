@@ -133,46 +133,23 @@ Matrix *new_matrix(char *name, int rows, int cols, DataType t){
     return A;
 }
 
+#define PRINT_MATRIX(NAME, FORMAT, TYPE)                                                     \
+for(int i = 0; i<NAME->rows; i++){                                                           \
+    printf("| ");                                                                            \
+    for(int j = 0; j<NAME->cols; j++)                                                        \
+        printf(FORMAT, NAME->elements.TYPE[i*NAME->cols + j]);                               \
+    printf("|\n");                                                                           \
+}
+
 void print_matrix(Matrix *A){
     if (A == NULL);
     else {
         printf("%s:\n", A->name);
         switch(A->datatype){
-            case short_int:
-                    for(int i = 0; i<A->rows; i++){
-                        printf("| ");
-                        for(int j = 0; j<A->cols; j++)
-                            printf("%hd ", A->elements.short_int[i*A->cols + j]);
-                        printf("|\n");
-                    }
-                    break;
-
-            case integer: 
-                    for(int i = 0; i<A->rows; i++){
-                        printf("| ");
-                        for(int j = 0; j<A->cols; j++)
-                            printf("%d ", A->elements.integer[i*A->cols + j]);
-                        printf("|\n");
-                    }
-                    break;
-            
-            case floating:
-                    for(int i = 0; i<A->rows; i++){
-                        printf("| ");
-                        for(int j = 0; j<A->cols; j++)
-                            printf("%f ", A->elements.floating[i*A->cols + j]);
-                        printf("|\n");
-                    }
-                    break;
-
-            case double_prec:
-                    for(int i = 0; i<A->rows; i++){
-                        printf("| ");
-                        for(int j = 0; j<A->cols; j++)
-                            printf("%lf ", A->elements.double_prec[i*A->cols + j]);
-                        printf("|\n");
-                    }
-                    break;
+            case short_int:     PRINT_MATRIX(A, "%hd ", short_int);      break;
+            case integer:       PRINT_MATRIX(A, "%d ", integer);         break;
+            case floating:      PRINT_MATRIX(A, "%f ", floating);        break;
+            case double_prec:   PRINT_MATRIX(A, "%lf ", double_prec);    break;
         }
     }
 
