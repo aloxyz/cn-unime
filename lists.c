@@ -16,24 +16,22 @@ Matrix *get_last(Matrix *head){
 }
 
 int llen(Matrix *head) {
-    int i = 1;
-    Matrix *tmp = head;
-    while(tmp->next != NULL) {
-	    tmp = tmp->next;
+    int i = 0;
+    while(head != NULL) {
+	    head = head->next;
 	    i++;
     }
     return i;
 }
 
 void push_matrix(Matrix **head, Matrix *new) {
-
+    if(new != NULL){
     remove_matrix(head, get_matrix(*head, new->name));  
-
     if (*head == NULL) *head = new;
     else get_last(*head)->next = new;
     
     new->next = NULL;
-    
+    }
 }
 
 void print_list(Matrix *head){
@@ -68,7 +66,8 @@ void remove_matrix(Matrix **head, Matrix *target) {
 }
 
 void rename_matrix(char *name, Matrix *A) {
-    strncpy(A->name, name, 16);
+    if(A != NULL)
+        strncpy(A->name, name, 16);
 }
 
 void clone_matrix(Matrix *head, Matrix *A, char* name) {
