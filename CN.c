@@ -19,7 +19,10 @@ int rccmp(Matrix *A, Matrix *B){
 }
 
 int summable(Matrix *A, Matrix *B){
-    return ((sizecmp(A, B) || (A->MType==scalar) || B->MType == scalar) || ((is_vector(A) || is_vector(B)) && (A->rows == B->rows || A->cols == B->cols)));
+    return ((sizecmp(A, B) || 
+    (A->MType==scalar) || B->MType == scalar) || 
+    ((is_vector(A) || is_vector(B)) && (A->rows == B->rows || A->cols == B->cols))
+    );
 }
 
 MatrixType matrix_typeof(Matrix *A){
@@ -30,90 +33,38 @@ MatrixType matrix_typeof(Matrix *A){
     else {printf("Invalid MatrixType, defaulting to scalar\n"); return scalar;}
 }
 
+#define INIT_ELEMENTS(NAME, TYPE, POINTER) \
+    NAME->elements.TYPE = malloc(sizeof(*NAME->elements.TYPE) * size(NAME));  \
+    for(int i=0; i< NAME->rows; i++) \
+        for(int j=0; j< NAME->cols; j++) \
+            NAME->elements.TYPE[i*NAME->cols + j] = POINTER.TYPE[i*NAME->cols + j];
+
 void init_elements(Matrix *A, Pointer v) {
     switch (A->datatype){
-        case short_int:
-            A->elements.short_int = (short int*)malloc(sizeof(short int)*A->rows*A->cols); 
-            for(int i=0; i< A->rows; i++) {
-                for(int j=0; j< A->cols; j++)
-                    A->elements.short_int[i*A->cols + j] = v.short_int[i*A->cols + j];
-        }
-        break;
-
-        case integer:
-            A->elements.integer = (int*)malloc(sizeof(int)*A->rows*A->cols); 
-            for(int i=0; i< A->rows; i++) {
-                for(int j=0; j< A->cols; j++){
-                    A->elements.integer[i*A->cols + j] = v.integer[i*A->cols + j];
-                }
-            }
-        break;
-
-        case floating:
-            A->elements.floating = (float*)malloc(sizeof(float)*A->rows*A->cols); 
-            for(int i=0; i< A->rows; i++) {
-                for(int j=0; j< A->cols; j++)
-                    A->elements.floating[i*A->cols + j] = v.floating[i*A->cols + j];
-            }
-        break;
-
-        case double_prec:
-            A->elements.double_prec = (double*)malloc(sizeof(double)*A->rows*A->cols); 
-            for(int i=0; i< A->rows; i++) {
-                for(int j=0; j< A->cols; j++)
-                    A->elements.double_prec[i*A->cols + j] = v.double_prec[i*A->cols + j];
-        }
-
-        break;
+        case short_int:     INIT_ELEMENTS(A, short_int, v);    break;
+        case integer:       INIT_ELEMENTS(A, integer, v);      break;
+        case floating:      INIT_ELEMENTS(A, floating, v);     break;
+        case double_prec:   INIT_ELEMENTS(A, double_prec, v);  break;
     }
 }
 
+#define PROMPT_INIT_ELEMENTS(NAME, TYPE, FORMAT)                                \
+    NAME->elements.TYPE = malloc(sizeof(*NAME->elements.TYPE) * size(NAME));    \
+    for(int i=0; i< NAME->rows; i++) {                                          \
+        printf("row %d:\n", i);                                                 \
+        for(int j=0; j< NAME->cols; j++) {                                      \
+            scanf(FORMAT, &NAME->elements.TYPE[i*NAME->cols + j]);              \
+            }                                                                   \
+        fflush(stdin);                                                          \
+    }
+
 void prompt_init_elements(Matrix *A) {
     printf("\n>>\n");
-    switch(A->datatype){
-        case short_int:
-            A->elements.short_int = (short int*)malloc(sizeof(short int)*A->rows*A->cols); 
-            for(int i=0; i< A->rows; i++) {
-                printf("row %d:\n", i);
-                for(int j=0; j< A->cols; j++) { 
-                    scanf("%hd", &A->elements.short_int[i*A->cols + j]);
-                    }
-                fflush(stdin);
-            }
-            break;
-
-        case integer:
-            A->elements.integer = (int*)malloc(sizeof(int)*A->rows*A->cols); 
-            for(int i=0; i< A->rows; i++) {
-                printf("row %d:\n", i);
-                for(int j=0; j< A->cols; j++) { 
-                    scanf("%d", &A->elements.integer[i*A->cols + j]);
-                }
-                fflush(stdin);
-            }
-            break;
-
-        case floating:
-            A->elements.floating = (float*)malloc(sizeof(int)*A->rows*A->cols); 
-            for(int i=0; i< A->rows; i++) {
-                printf("row %d:\n", i);
-                for(int j=0; j< A->cols; j++) { 
-                    scanf("%f", &A->elements.floating[i*A->cols + j]);
-                }
-                fflush(stdin);
-            }
-            break;
-
-        case double_prec:
-            A->elements.double_prec = (double*)malloc(sizeof(int)*A->rows*A->cols); 
-            for(int i=0; i< A->rows; i++) {
-                printf("row %d:\n", i);
-                for(int j=0; j< A->cols; j++) { 
-                    scanf("%lf", &A->elements.double_prec[i*A->cols + j]);
-                }
-                fflush(stdin);
-            }
-            break;
+    switch (A->datatype){
+    case short_int:     PROMPT_INIT_ELEMENTS(A, short_int, "%hd");      break;
+    case integer:       PROMPT_INIT_ELEMENTS(A, integer, "%d");         break;
+    case floating:      PROMPT_INIT_ELEMENTS(A, floating, "%f");        break;
+    case double_prec:   PROMPT_INIT_ELEMENTS(A, double_prec, "%lf");    break;
     }
 }
 
