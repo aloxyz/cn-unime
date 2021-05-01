@@ -361,3 +361,25 @@ Matrix *matrix_prod(Matrix *A, Matrix *B) {
   }
   return NULL;
 }
+
+#define MATRIX_AVERAGE(TYPE)   \
+    ans = new_matrix("ans", 1, 1, TYPE);   \
+    ans->elements.TYPE = malloc(sizeof(*ans->elements.TYPE) * size(ans));   \
+    sum.TYPE = malloc(sizeof(TYPE));   \
+    *sum.TYPE = 0;   \
+    for(int i = 0; i < size(A); i++){   \
+        *sum.TYPE += A->elements.TYPE[i];}   \
+    ans->elements.TYPE[0] = (*sum.TYPE)/size(A);
+
+Matrix *matrix_average(Matrix *A) {
+    Matrix *ans;
+    Pointer sum;
+
+    switch(A->datatype) {
+        case short_int:     MATRIX_AVERAGE(short_int);      break;
+        case integer:       MATRIX_AVERAGE(integer);        break;
+        case floating:      MATRIX_AVERAGE(floating);       break;
+        case double_prec:   MATRIX_AVERAGE(double_prec);    break;
+    }
+    return ans;
+}

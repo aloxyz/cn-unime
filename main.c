@@ -62,6 +62,7 @@ int main() {
     push_matrix(&head, E);
     push_matrix(&head, F);
 
+    print_matrix(matrix_average(C));
     //default debug matrices
 /*
     printf("removing %s", B->name);
