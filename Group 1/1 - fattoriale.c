@@ -1,30 +1,20 @@
+//dato un numero n calcola tutti i fattoriali da 2 a n, per i tipi int float e double
 #include <stdio.h>
-#include <stdlib.h>
-
-#define FACT(N, TYPE, FORMAT1, FORMAT2)   \
-    printf("\n");   \
-    printf(FORMAT1, N);   \
-    while(N < max) {   \
-        TYPE tmp = N;   \
-        for(int i = N - 1; i >= 2; i--) {   \
-            tmp *= i;   \
-        }   \
-        printf(FORMAT2, N, tmp);   \
-        N++;   \
-    }
-
+#include<stdlib.h>
 
 int main(int argc, char **argv) {
 
-    int x = atoi(argv[1]);
-    float y = atof(argv[2]);
-    double z = atof(argv[3]);
-    int max = atoi(argv[4]);
+    int max = atoi(argv[1]);
+    int fac_int=1;
+    float fac_float=1;
+    double fac_double=1;
 
-    printf("max: %d\n-------", max);
+    for(int i=2; i<=max; i++){
+        printf("Fac %d:\n", i);
+        printf("int:    %d\n", fac_int = fac_int*i);
+        printf("float:  %f\n", fac_float = fac_float*i);
+        printf("double: %lf\n", fac_double = fac_double*i);
+    }
 
-    FACT(x, int,    "\nint %d:\n\n",        "%d! = %d\n");
-    FACT(y, float,  "\nfloat %.2f:\n\n",    "%.2f! = %.2f\n");
-    FACT(z, double, "\ndouble %.4lf:\n\n",  "%.4lf! = %.4lf\n");
-    
+    return 0;
 }
