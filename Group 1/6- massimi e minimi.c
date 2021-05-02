@@ -2,54 +2,51 @@
 #include <stdlib.h>
 #include <string.h>
 
-int int_minmax(int *v, int size, char *m) {
-    int tmp = v[0];
+#define MINMAX(V, FORMAT, TMP, M)       \
+scanf(FORMAT, &TMP);       \
+if(M == 'm') {       \
+for(int i = 1; i < size; i++) {       \
+    scanf(FORMAT, &V);       \
+    if(V < TMP) TMP = V;       \
+    }       \
+}       \
+else {       \
+for(int i = 1; i < size; i++) {       \
+    scanf(FORMAT, &V);       \
+    if(V > TMP) TMP = V;       \
+    }       \
+      \
+} \
+printf("ans: " FORMAT "\n", TMP); 
 
-    if(strcmp(m, "min") == 0) {
-        for(int i = 0; i < size; i++) if(v[i] < tmp) tmp = v[i];
-        return tmp;
-    }
-    if(strcmp(m, "max") == 0) {
-        for(int i = 0; i < size; i++) if(v[i] > tmp) tmp = v[i];
-        return tmp;
-    }
-    return -1;
-}
-double double_minmax(double *v, int size, char *m) {
-    double tmp = v[0];
-
-    if(strcmp(m, "min") == 0) {
-        for(int i = 0; i < size; i++) if(v[i] < tmp) tmp = v[i];
-        return tmp;
-    }
-    if(strcmp(m, "max") == 0) {
-        for(int i = 0; i < size; i++) if(v[i] > tmp) tmp = v[i];
-        return tmp;
-    }
-    return -1;
-}
 
 int main() {
+    union {
+        short int short_int;
+        int integer;
+        float floating;
+        double double_prec;
+        char *word;
+    } v, tmp;
+
     int t, size;
-    char m[BUFSIZ];
-    printf("scegliere tra\n1. interi\n2. reali\n>> ");
+
+    printf("scegliere tra\n1. short_int\n2. integer\n3. floating\n4. double_prec\n>> ");
     scanf("%d", &t);
     printf("inserire la lunghezza del vettore\n>>  ");
     scanf("%d", &size);
-    printf("\"min\" o \"max\"\n>> ");
-    scanf(" %s", m);
+    
+    char c;
+    printf("\"m\" o \"M\"\n>> ");
+    scanf(" %c", &c);
 
+    if(c != 'm' && c != 'M') {
+        printf("%c is invalid, defaulting to max\n", c);
+        c = 'M';
+    }
     printf("inizializzare il vettore\n>> ");
-    if(t <= 1) {
-        int *v = malloc(sizeof(int) * size);
-        int sum = 0;
-        for(int i = 0; i < size; i++) scanf("%d", &v[i]);
-        printf("%d", int_minmax(v, size, m));
-    }
-    if(t >= 2) {
-        double *v = malloc(sizeof(int) * size);
-        double sum = 0;
-        for(int i = 0; i < size; i++) scanf("%lf", &v[i]);
-        printf("%lf", double_minmax(v, size, m));
-    }
+    if(t <= 1)      {MINMAX(v.short_int, "%hd", tmp.short_int, c)}
+    else if(t == 2) {MINMAX(v.integer, "%d", tmp.integer, c)}
+    else if(t == 3) {MINMAX(v.floating, "%f", tmp.floating, c)}
+    else if(t >= 4) {MINMAX(v.double_prec, "%lf", tmp.double_prec, c)}
 }
