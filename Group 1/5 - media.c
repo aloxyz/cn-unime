@@ -10,6 +10,7 @@ int main() {
     printf("inserire la lunghezza del vettore\n>>  ");
     scanf("%d", &size);
     
+    printf("inizializzare il vettore\n>> ");
     if(t <= 1) {
         int *v = malloc(sizeof(int) * size);
         int sum = 0;
