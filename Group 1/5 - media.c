@@ -20,7 +20,7 @@ int main() {
 
     int t, size;
     
-    printf("scegliere tra\n1. interi\n2. reali\n>> ");
+    printf("scegliere tra\n1. short_int\n2. integer\n3. floating\n4. double_prec\n>> ");
     scanf("%d", &t);
     printf("inserire la lunghezza del vettore\n>>  ");
     scanf("%d", &size);
