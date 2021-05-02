@@ -61,4 +61,6 @@ void matrix_typeconv(Matrix* A, DataType);                              //casts 
 //matrix operations
 Matrix *matrix_sum(Matrix *A, Matrix *B);                       //sum two matrices A and B
 Matrix *matrix_prod(Matrix *A, Matrix *B);
-Matrix *matrix_average(Matrix *A);                
+Matrix *matrix_average(Matrix *A);       
+Matrix *matrix_seq_prod(Matrix *A);
+Matrix *matrix_seq_sum(Matrix *A);         

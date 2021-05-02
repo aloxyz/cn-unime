@@ -383,3 +383,49 @@ Matrix *matrix_average(Matrix *A) {
     }
     return ans;
 }
+
+#define MATRIX_SEQ_PROD(TYPE)   \
+    ans = new_matrix("ans", 1, 1, TYPE);   \
+    ans->elements.TYPE = malloc(sizeof(*ans->elements.TYPE) * size(ans));   \
+    prod.TYPE = malloc(sizeof(TYPE));   \
+    *prod.TYPE = 1;   \
+    for(int i = 0; i < size(A); i++){   \
+        *prod.TYPE *= A->elements.TYPE[i];}   \
+    ans->elements.TYPE[0] = *prod.TYPE;
+
+Matrix *matrix_seq_prod(Matrix *A) {
+    Matrix *ans;
+    Pointer prod;
+
+    switch(A->datatype) {
+        case short_int:     MATRIX_SEQ_PROD(short_int);      break;
+        case integer:       MATRIX_SEQ_PROD(integer);        break;
+        case floating:      MATRIX_SEQ_PROD(floating);       break;
+        case double_prec:   MATRIX_SEQ_PROD(double_prec);    break;
+    }
+    return ans;
+
+}
+
+#define MATRIX_SEQ_SUM(TYPE)   \
+    ans = new_matrix("ans", 1, 1, TYPE);   \
+    ans->elements.TYPE = malloc(sizeof(*ans->elements.TYPE) * size(ans));   \
+    sum.TYPE = malloc(sizeof(TYPE));   \
+    *sum.TYPE = 0;   \
+    for(int i = 0; i < size(A); i++){   \
+        *sum.TYPE += A->elements.TYPE[i];}   \
+    ans->elements.TYPE[0] = *sum.TYPE;
+
+Matrix *matrix_seq_sum(Matrix *A) {
+    Matrix *ans;
+    Pointer sum;
+
+    switch(A->datatype) {
+        case short_int:     MATRIX_SEQ_SUM(short_int);      break;
+        case integer:       MATRIX_SEQ_SUM(integer);        break;
+        case floating:      MATRIX_SEQ_SUM(floating);       break;
+        case double_prec:   MATRIX_SEQ_SUM(double_prec);    break;
+    }
+    return ans;
+
+}
