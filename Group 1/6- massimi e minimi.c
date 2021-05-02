@@ -52,7 +52,4 @@ int main() {
         for(int i = 0; i < size; i++) scanf("%lf", &v[i]);
         printf("%lf", double_minmax(v, size, m));
     }
-
-    
-
 }
