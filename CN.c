@@ -103,6 +103,7 @@ void print_matrix(Matrix *A){
             case floating:      PRINT_MATRIX(A, "%f ", floating);        break;
             case double_prec:   PRINT_MATRIX(A, "%lf ", double_prec);    break;
         }
+    printf("\n");
     }
 }
 
@@ -221,7 +222,6 @@ Matrix *matrix_sum(Matrix *A, Matrix *B){
             case double_prec:   ARITHMETIC_SUM(double_prec);    break;          
         }
 
-        print_matrix(C);
         if (casted == Acasted)  matrix_typeconv(A, tmp_datatype);
         else    matrix_typeconv(B, tmp_datatype);        
         return C;
