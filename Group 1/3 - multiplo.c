@@ -1,30 +1,37 @@
-#include "../lists.h"
+//programma che dati due numeri A e B, dice se A è pari e se è multiplo di B
+#include <stdio.h>
 
-
-void ismultiple(Matrix *A) {
-    if(A->datatype == integer) {
-        if(A->MType == scalar) {
-            printf("\n%d", A->elements.integer[0]);
-            if(A->elements.integer[0] % 2 == 0) printf(" è pari\n");
-            else printf(" è dispari\n");
-        } else {
-            printf("\n%d", A->elements.integer[0]);
-            if(A->elements.integer[0] % A->elements.integer[1] == 0) printf(" è multiplo di ");
-            else printf(" non è multiplo di ");
-            printf("%d\n", A->elements.integer[1]);
-        }
-    } else printf("\nnon integral matrix datatype\n");
-}
+#define ISMULTIPLE(FORMAT, A, B)                                               \
+  if (A % 2) printf(FORMAT " e' dispari", A);                                  \
+  else       printf(FORMAT " e' pari", A);                                     \
+                                                                               \
+  if (A % B) printf(" e non e' multiplo di " FORMAT, B);                       \
+  else       printf(" ed e' multiplo di " FORMAT, B);
 
 int main() {
-    Matrix *head = NULL;
 
-    int v1[] = { 10, 5 };
-    Pointer v;
-    v.integer = v1;
-    Matrix *A = new_matrix("A", 1, 2, integer);
-    init_elements(A, v);
-    push_matrix(&head, A);
+  typedef union {
+    short short_int;
+    int integer;
+  } integer;
+
+  integer a, b;
+  short int choice;
+  printf("1 per short int (2 byte), 2 per int (4 byte): ");
+  scanf("%hd", &choice);
+  
+  if (choice == 1) {
     
-    ismultiple(A);
+    printf("Inserire il primo e il secondo numero: ");
+    scanf("%hd%hd", &a.short_int, &b.short_int);
+    ISMULTIPLE("%hd", a.short_int, b.short_int)
+  } 
+  else {
+    if (choice != 2)    printf("Numero errato, default a int");
+    
+    printf("Inserire il primo e il secondo numero: ");
+    scanf("%d%d", &a.integer, &b.integer);
+
+    ISMULTIPLE("%d", a.integer, b.integer);
+  }
 }
