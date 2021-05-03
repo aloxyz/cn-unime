@@ -298,28 +298,24 @@ void print_info(Matrix *A) {
     }
 }
 
-#define TRANSPOSE(TYPE)                                                             \
-TMP.TYPE = malloc(sizeof(*TMP.TYPE));                                               \
-for(int i = 1; i <A->rows; i++)                                                     \
-    for(int j=0; j < i; j++){                                                 \
-        TMP.TYPE[0] = A->elements.TYPE[i * A->cols + j];                            \
-        A->elements.TYPE[i * A->cols + j] = A->elements.TYPE[j * A->cols + i];      \
-        A->elements.TYPE[j * A->cols + i] = TMP.TYPE[0];                            \
+#define TRANSPOSE(TYPE)                                                       \
+C->elements.TYPE = malloc(sizeof(*C->elements.TYPE) * size(A))    ;           \
+for(int i = 0; i <A->rows; i++)                                               \
+    for(int j=0; j <= i; j++){                                                 \
+        C->elements.TYPE[i * A->cols + j] = A->elements.TYPE[j * A->cols + i];\
+        C->elements.TYPE[j * A->cols + i] = A->elements.TYPE[i * A->cols + j];\
     }
 
-void transpose(Matrix *A){
-    int tmp;
-    Pointer TMP;
+Matrix *transpose(Matrix *A){
+    if(A == NULL) return NULL;
+    Matrix *C = new_matrix("ans", A->cols, A->rows, A->datatype);
     switch(A->datatype){
         case short_int:     TRANSPOSE(short_int); break;
         case integer:       TRANSPOSE(integer); break;
         case floating:      TRANSPOSE(floating); break;
         case double_prec:   TRANSPOSE(double_prec); break;
     }
-    tmp = A->rows;
-    A->rows = A->cols;
-    A->cols = tmp;
-    A->MType = matrix_typeof(A);
+    return C;
 }
 
 #define ARITHMETIC_PROD(TYPE)                                                                                   \

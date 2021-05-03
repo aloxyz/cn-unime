@@ -82,7 +82,7 @@ int main() {
         switch (c) {
             case '^':
                 scanf("%s", m1);
-                transpose(get_matrix(head, m1));
+                push_matrix(&head, transpose(get_matrix(head, m1)));
                 break;
             case '*':
                 printf("\nproduct:");
