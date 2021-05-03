@@ -45,8 +45,8 @@ int main() {
     int integer;
     float floating;
     double double_prec;
-    char *word;
-  } * array, tmp;
+    char word[BUFSIZ];
+  } *array, tmp;
 
   printf("Quanti elementi vuoi ci siano\?: ");
   scanf("%d", &n);
@@ -72,17 +72,13 @@ int main() {
     PRINT_ARRAY("%.10f", floating);
   
   } else if (choice == 's') {
-    int characters;
-    printf("Quanti caratteri vuoi che ogni stringa abbia\?: ");
-    scanf("%d", &characters);
-    array = malloc(sizeof(char) * characters * n);
-    tmp.word = malloc(sizeof(char) * characters);
+    
+    array = malloc(sizeof(char*) * n);
     for (int i = 0; i < n; i++) {
-      array[i].word = malloc(sizeof(char) * characters);
       scanf("%s", array[i].word);
     }
-
     printf("\n\n");
+    
     BUBBLE_SORT_STRINGS()
     PRINT_ARRAY("%s", word);
   

@@ -1,22 +1,24 @@
+//Prende n elementi e ne trova il minore o il maggiore
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-#define MINMAX(V, FORMAT, TMP, M)       \
-scanf(FORMAT, &TMP);       \
-if(M == 'm') {       \
-for(int i = 1; i < size; i++) {       \
-    scanf(FORMAT, &V);       \
-    if(V < TMP) TMP = V;       \
-    }       \
-}       \
-else {       \
-for(int i = 1; i < size; i++) {       \
-    scanf(FORMAT, &V);       \
-    if(V > TMP) TMP = V;       \
-    }       \
-      \
-} \
+#define MINMAX(V, FORMAT, TMP, M)           \
+scanf(FORMAT, &TMP);                        \
+if(M == 'm') {                              \
+for(int i = 1; i < size; i++) {             \
+    scanf(FORMAT, &V);                      \
+    if(V < TMP) TMP = V;                    \
+    }                                       \
+}                                           \
+else {                                      \
+for(int i = 1; i < size; i++) {             \
+    scanf(FORMAT, &V);                      \
+    if(V > TMP) TMP = V;                    \
+    }                                       \
+                                            \
+}                                           \
 printf("ans: " FORMAT "\n", TMP); 
 
 
@@ -26,7 +28,6 @@ int main() {
         int integer;
         float floating;
         double double_prec;
-        char *word;
     } v, tmp;
 
     int t, size;
