@@ -272,7 +272,7 @@ char *str_matrix_typeof(Matrix *A) {
 }
 
 DataType datatype_matrix_typeof(char *datatype) {
-    if(strcmp(datatype, "short_int") == 0)  return short_int;
+    if(strcmp(datatype, "short") == 0)  return short_int;
     if(strcmp(datatype, "int") == 0)        return integer;
     if(strcmp(datatype, "float") == 0)      return floating;
     if(strcmp(datatype, "double") == 0)     return double_prec;
@@ -296,6 +296,30 @@ void print_info(Matrix *A) {
         A->name,
         next);
     }
+}
+
+#define TRANSPOSE(TYPE)                                                             \
+TMP.TYPE = malloc(sizeof(*TMP.TYPE));                                               \
+for(int i = 1; i <A->rows; i++)                                                     \
+    for(int j=0; j < i; j++){                                                 \
+        TMP.TYPE[0] = A->elements.TYPE[i * A->cols + j];                            \
+        A->elements.TYPE[i * A->cols + j] = A->elements.TYPE[j * A->cols + i];      \
+        A->elements.TYPE[j * A->cols + i] = TMP.TYPE[0];                            \
+    }
+
+void transpose(Matrix *A){
+    int tmp;
+    Pointer TMP;
+    switch(A->datatype){
+        case short_int:     TRANSPOSE(short_int); break;
+        case integer:       TRANSPOSE(integer); break;
+        case floating:      TRANSPOSE(floating); break;
+        case double_prec:   TRANSPOSE(double_prec); break;
+    }
+    tmp = A->rows;
+    A->rows = A->cols;
+    A->cols = tmp;
+    A->MType = matrix_typeof(A);
 }
 
 #define ARITHMETIC_PROD(TYPE)                                                                                   \
@@ -360,6 +384,42 @@ Matrix *matrix_prod(Matrix *A, Matrix *B) {
     return C;
   }
   return NULL;
+}
+
+#define DOT_PRODUCT(TYPE)                            \
+C->elements.TYPE = malloc(sizeof(*C->elements.TYPE));\
+C->elements.TYPE[0] = 0;                             \
+for(int i=0; i < size(A); i++)                       \
+    C->elements.TYPE[0] += A->elements.TYPE[i] * B->elements.TYPE[i];
+
+Matrix *dot_product(Matrix *A, Matrix *B){
+    if(A!=NULL && B!=NULL && is_vector(A) && is_vector(B) && size(A) == size(B)){
+    
+    Matrix *C = (Matrix *)malloc(sizeof(Matrix));
+    DataType tmp_datatype;
+    enum casted { Acasted, Bcasted } casted;
+
+        if (A->datatype > B->datatype) {
+        tmp_datatype = B->datatype;
+        matrix_typeconv(B, A->datatype);
+        casted = Bcasted;
+        } 
+        else {
+        tmp_datatype = A->datatype;
+        matrix_typeconv(A, B->datatype);
+        casted = Acasted;
+        }
+
+    C = new_matrix("ans", 1, 1, A->datatype);
+    switch(C->datatype){
+        case short_int:     DOT_PRODUCT(short_int);     break;
+        case integer:       DOT_PRODUCT(integer);       break;
+        case floating:      DOT_PRODUCT(floating);      break;
+        case double_prec:   DOT_PRODUCT(double_prec);   break;
+    }
+    return C;
+    }
+    return NULL;
 }
 
 #define MATRIX_AVERAGE(TYPE)   \

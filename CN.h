@@ -64,3 +64,5 @@ Matrix *matrix_prod(Matrix *A, Matrix *B);
 Matrix *matrix_average(Matrix *A);       
 Matrix *matrix_seq_prod(Matrix *A);
 Matrix *matrix_seq_sum(Matrix *A);         
+Matrix *dot_product(Matrix *A, Matrix *B);                      //returns dot product of A and B
+void transpose(Matrix *A);

@@ -80,6 +80,10 @@ int main() {
         printf("\n>> ");
         scanf(" %c", &c);
         switch (c) {
+            case '^':
+                scanf("%s", m1);
+                transpose(get_matrix(head, m1));
+                break;
             case '*':
                 printf("\nproduct:");
                 scanf("%s%s", m1, m2);
