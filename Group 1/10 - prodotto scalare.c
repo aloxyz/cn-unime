@@ -2,15 +2,15 @@
 #include <stdlib.h>
 
 #define SCALAR_PROD(FORMAT, TYPE)\
-    v = malloc(sizeof(v->TYPE)*size);\
-    w = malloc(sizeof(w->TYPE)*size);\
+    v = malloc(sizeof(v->TYPE)*size + size);\
+    w = malloc(sizeof(w->TYPE)*size + size);\
     printf("inizializzare il vettore 1\n>> ");\
     for(int i = 0; i < size; i++) scanf(FORMAT, &v[i].TYPE);\
     printf("inizializzare il vettore 2\n>> ");\
     for(int i = 0; i < size; i++) scanf(FORMAT, &w[i].TYPE);\
     tmp.TYPE = 0;\
-    for(int i = 0; i < size; i++) tmp.TYPE += v[i].TYPE*w[i].TYPE;\
-    printf("scalar product: "FORMAT "\n", tmp.TYPE);
+    for(int i = 0; i < size; i++) tmp.TYPE += v[i].TYPE * w[i].TYPE; \
+    printf("prodotto scalare: "FORMAT "\n", tmp.TYPE);
 
 
 int main() {
@@ -29,10 +29,8 @@ int main() {
     printf("inserire la lunghezza dei vettori\n>>  ");
     scanf("%d", &size);
 
-
-    if(t <= 1) {SCALAR_PROD("%hd", short_int)} else
-    if(t == 2) {SCALAR_PROD("%d", integer)} else
+    if(t == 1) {SCALAR_PROD("%hd", short_int)} else
     if(t == 3) {SCALAR_PROD("%f", floating)} else
-    if(t >= 4) {SCALAR_PROD("%lf", double_prec)}
-
+    if(t == 4) {SCALAR_PROD("%lf", double_prec)}
+    else       {SCALAR_PROD("%d", integer)}
 }
