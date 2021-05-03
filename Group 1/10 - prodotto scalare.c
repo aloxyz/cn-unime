@@ -1,4 +1,4 @@
-#include "../lists.h"
+#include "..\CN.h"
 
 int main(){
     Matrix *A, *B, *C;
