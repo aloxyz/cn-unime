@@ -2,8 +2,8 @@
 #include <stdlib.h>
 
 #define SCALAR_PROD(FORMAT, TYPE)\
-    v = malloc(sizeof(v->TYPE)*size + size);\
-    w = malloc(sizeof(w->TYPE)*size + size);\
+    v = malloc(sizeof(v->TYPE)*size + sizeof(tmp.TYPE));\
+    w = malloc(sizeof(w->TYPE)*size + sizeof(tmp.TYPE));\
     printf("inizializzare il vettore 1\n>> ");\
     for(int i = 0; i < size; i++) scanf(FORMAT, &v[i].TYPE);\
     printf("inizializzare il vettore 2\n>> ");\
