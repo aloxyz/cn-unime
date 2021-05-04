@@ -7,33 +7,37 @@ int main() {
 
     //default debug matrices
 
-    short int v1[] =
+    short int a1[] =
     {
         1,2,3,
         4,5,6,
         7,8,9
     };
 
-    short int w1[] =
+    short int b1[] =
     {
         1,3,6,
         0,1,6,
         0,0,1
     };
 
-    Pointer v, w;
+    Pointer a, b;
 
-    v.short_int = v1;
-    w.short_int = w1;
+    a.short_int = a1;
+    b.short_int = b1;
 
     Matrix *A = new_matrix("A", 3, 3, short_int);
     Matrix *B = new_matrix("B", 3, 3, short_int);
     
-    init_elements(A, v);
-    init_elements(B, w);
+    init_elements(A, a);
+    init_elements(B, b);
 
     push_matrix(&head, A);
     push_matrix(&head, B);
+
+    int vv[] = {1,2,3}; int ww[] = {1,2,3}; Pointer v, w;
+    v.integer = vv; Matrix *V = new_matrix("V", 1, 3, integer); init_elements(V, v); push_matrix(&head, V);
+    w.integer = ww; Matrix *W = new_matrix("W", 3, 1, integer); init_elements(W, w); push_matrix(&head, W);
 
     short int small[] = {1,2,3,4,5,6};
     int medium[] = {1,2,3,4,5,6};
@@ -62,8 +66,6 @@ int main() {
     push_matrix(&head, E);
     push_matrix(&head, F);
 
-    print_matrix(matrix_seq_sum(F));
-    print_matrix(matrix_seq_prod(F));
     //default debug matrices
 /*
     printf("removing %s", B->name);
@@ -80,9 +82,15 @@ int main() {
         printf("\n>> ");
         scanf(" %c", &c);
         switch (c) {
+            case 'x':
+                scanf("%s%s", m1, m2);
+                push_matrix(&head, v_tensor_prod(get_matrix(head, m1), get_matrix(head, m2)));
+                print_matrix(get_matrix(head, "ans"));
+                break;
             case '^':
                 scanf("%s", m1);
                 push_matrix(&head, transpose(get_matrix(head, m1)));
+                print_matrix(get_matrix(head, "ans"));
                 break;
             case '*':
                 printf("\nproduct:");

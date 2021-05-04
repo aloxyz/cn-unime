@@ -418,34 +418,38 @@ Matrix *dot_product(Matrix *A, Matrix *B){
     return NULL;
 }
 
-#define TENSOR_PROD(TYPE)
-C->elements.TYPE = malloc(sizeof(*C->elements.TYPE)*C->rows*C->cols);
-C->elements.TYPE[0] = 1;
+#define V_TENSOR_PROD(TYPE)\
+C->elements.TYPE = malloc(sizeof(*C->elements.TYPE)*size(C));\
+    for(int i = 0; i < size(A); i++)\
+        for(int j = 0; j < size(B); j++)\
+            C->elements.TYPE[i + A->cols * j] = A->elements.TYPE[i] * B->elements.TYPE[j];
 
-
-
-Matrix *tensor_prod(Matrix *A, Matrix *B) {
-    Matrix *C = malloc(sizeof(Matrix));
-    DataType tmp_datatype;
-    enum casted { Acasted, Bcasted } casted;
-        if (A->datatype > B->datatype) {
-            tmp_datatype = B->datatype;
-            matrix_typeconv(B, A->datatype);
-            casted = Bcasted;
-        } else {
-            tmp_datatype = A->datatype;
-            matrix_typeconv(A, B->datatype);
-            casted = Acasted;
+Matrix *v_tensor_prod(Matrix *A, Matrix *B) {
+    if(A!=NULL && B!=NULL && is_vector(A) && is_vector(B)){
+        DataType tmp_datatype;
+        enum casted { Acasted, Bcasted } casted;
+            if (A->datatype > B->datatype) {
+                tmp_datatype = B->datatype;
+                matrix_typeconv(B, A->datatype);
+                casted = Bcasted;
+            } else {
+                tmp_datatype = A->datatype;
+                matrix_typeconv(A, B->datatype);
+                casted = Acasted;
+            }
+        Matrix *C = malloc(sizeof(Matrix));
+        if(A->MType == col_vector && B->MType == row_vector) C = new_matrix("ans", A->rows, B->cols, A->datatype);
+        else if (A->MType == row_vector && B->MType == col_vector) C = new_matrix("ans", B->rows, A->cols, A->datatype);
+        else if (A->MType == A->MType == col_vector) C = new_matrix("ans", size(A)*size(B), 1, A->datatype);
+        else     C = new_matrix("ans", 1, size(A)*size(B), A->datatype);
+        int k = 0;
+        switch(C->datatype){
+            case short_int:     V_TENSOR_PROD(short_int);     break;
+            case integer:       V_TENSOR_PROD(integer);       break;
+            case floating:      V_TENSOR_PROD(floating);      break;
+            case double_prec:   V_TENSOR_PROD(double_prec);   break;
         }
-
-    C = new_matrix("ans", A->rows*B->rows, A->cols*B->cols, A->datatype);
-    switch(C->datatype){
-        case short_int:     TENSOR_PROD(short_int);     break;
-        case integer:       TENSOR_PROD(integer);       break;
-        case floating:      TENSOR_PROD(floating);      break;
-        case double_prec:   TENSOR_PROD(double_prec);   break;
-    }
-    return C;
+        return C;
     }
     return NULL;
 }

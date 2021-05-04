@@ -66,3 +66,4 @@ Matrix *matrix_seq_prod(Matrix *A);
 Matrix *matrix_seq_sum(Matrix *A);         
 Matrix *dot_product(Matrix *A, Matrix *B);                      //returns dot product of A and B
 Matrix *transpose(Matrix *A);
+Matrix *v_tensor_prod(Matrix *A, Matrix *B);
