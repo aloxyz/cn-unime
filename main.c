@@ -67,12 +67,12 @@ int main() {
     push_matrix(&head, F);
 
     //default debug matrices
-/*
-    printf("removing %s", B->name);
-    remove_matrix(head, "B");
-    printf("\n");
-    print_list(head);
-*/
+    print_matrix(v_tensor_prod(V, W));
+    print_matrix(v_tensor_prod(V, V));
+    print_matrix(v_tensor_prod(W, W));
+
+    //debug
+
     DataType t;
     char c;
     char cc[16];

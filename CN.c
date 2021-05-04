@@ -422,7 +422,7 @@ Matrix *dot_product(Matrix *A, Matrix *B){
 C->elements.TYPE = malloc(sizeof(*C->elements.TYPE)*size(C));\
     for(int i = 0; i < size(A); i++)\
         for(int j = 0; j < size(B); j++)\
-            C->elements.TYPE[i + A->cols * j] = A->elements.TYPE[i] * B->elements.TYPE[j];
+            C->elements.TYPE[i * A->cols + j] = A->elements.TYPE[i] * B->elements.TYPE[j];
 
 Matrix *v_tensor_prod(Matrix *A, Matrix *B) {
     if(A!=NULL && B!=NULL && is_vector(A) && is_vector(B)){
@@ -437,12 +437,13 @@ Matrix *v_tensor_prod(Matrix *A, Matrix *B) {
                 matrix_typeconv(A, B->datatype);
                 casted = Acasted;
             }
+        
         Matrix *C = malloc(sizeof(Matrix));
-        if(A->MType == col_vector && B->MType == row_vector) C = new_matrix("ans", A->rows, B->cols, A->datatype);
-        else if (A->MType == row_vector && B->MType == col_vector) C = new_matrix("ans", B->rows, A->cols, A->datatype);
-        else if (A->MType == A->MType == col_vector) C = new_matrix("ans", size(A)*size(B), 1, A->datatype);
-        else     C = new_matrix("ans", 1, size(A)*size(B), A->datatype);
-        int k = 0;
+        if      (A->MType == col_vector && B->MType == row_vector)  C = new_matrix("ans", A->rows, B->cols, A->datatype);  // col x row
+        else if (A->MType == row_vector && B->MType == col_vector)  C = new_matrix("ans", B->rows, A->cols, A->datatype);  // row x col
+
+        else if (A->MType == row_vector && B->MType == row_vector)  C = new_matrix("ans", 1, size(A)*size(B), A->datatype);// row x row
+        else                                                        C = new_matrix("ans", size(A)*size(B), 1, A->datatype);// col x col / everything else
         switch(C->datatype){
             case short_int:     V_TENSOR_PROD(short_int);     break;
             case integer:       V_TENSOR_PROD(integer);       break;
