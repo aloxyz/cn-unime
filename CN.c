@@ -418,6 +418,38 @@ Matrix *dot_product(Matrix *A, Matrix *B){
     return NULL;
 }
 
+#define TENSOR_PROD(TYPE)
+C->elements.TYPE = malloc(sizeof(*C->elements.TYPE)*C->rows*C->cols);
+C->elements.TYPE[0] = 1;
+
+
+
+Matrix *tensor_prod(Matrix *A, Matrix *B) {
+    Matrix *C = malloc(sizeof(Matrix));
+    DataType tmp_datatype;
+    enum casted { Acasted, Bcasted } casted;
+        if (A->datatype > B->datatype) {
+            tmp_datatype = B->datatype;
+            matrix_typeconv(B, A->datatype);
+            casted = Bcasted;
+        } else {
+            tmp_datatype = A->datatype;
+            matrix_typeconv(A, B->datatype);
+            casted = Acasted;
+        }
+
+    C = new_matrix("ans", A->rows*B->rows, A->cols*B->cols, A->datatype);
+    switch(C->datatype){
+        case short_int:     TENSOR_PROD(short_int);     break;
+        case integer:       TENSOR_PROD(integer);       break;
+        case floating:      TENSOR_PROD(floating);      break;
+        case double_prec:   TENSOR_PROD(double_prec);   break;
+    }
+    return C;
+    }
+    return NULL;
+}
+
 #define MATRIX_AVERAGE(TYPE)   \
     ans = new_matrix("ans", 1, 1, TYPE);   \
     ans->elements.TYPE = malloc(sizeof(*ans->elements.TYPE) * size(ans));   \
