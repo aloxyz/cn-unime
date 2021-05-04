@@ -52,7 +52,7 @@ void init_elements(Matrix *A, Pointer v) {
 #define PROMPT_INIT_ELEMENTS(NAME, TYPE, FORMAT)                                \
     NAME->elements.TYPE = malloc(sizeof(*NAME->elements.TYPE) * size(NAME));    \
     for(int i=0; i< NAME->rows; i++) {                                          \
-        printf("row %d:\n", i);                                                 \
+        printf("row %d:\n", i+1);                                               \
         for(int j=0; j< NAME->cols; j++) {                                      \
             scanf(FORMAT, &NAME->elements.TYPE[i*NAME->cols + j]);              \
             }                                                                   \
@@ -82,6 +82,7 @@ Matrix *new_matrix(char *name, int rows, int cols, DataType t){
         perror("Invalid datatype, defaulting to integer\n"); 
     } else { A->datatype = t; }
     
+    A->next = NULL;
     return A;
 }
 
@@ -94,7 +95,7 @@ for(int i = 0; i<NAME->rows; i++){                                              
 }
 
 void print_matrix(Matrix *A){
-    if (A == NULL);
+    if (A == NULL) printf("NULL Matrix\n");
     else {
         printf("%s:\n", A->name);
         switch(A->datatype){
@@ -117,8 +118,8 @@ Matrix *prompt_matrix() {
 
     Matrix *tmp = new_matrix(name, rows, cols, datatype_matrix_typeof(datatype));
     
-    printf("\nInsert elements:");       prompt_init_elements(tmp);
-    
+    printf("\nInsert elements:");       
+    prompt_init_elements(tmp);
     print_matrix(tmp);
     return tmp;
 
@@ -298,21 +299,20 @@ void print_info(Matrix *A) {
     }
 }
 
-#define TRANSPOSE(TYPE)                                                       \
-C->elements.TYPE = malloc(sizeof(*C->elements.TYPE) * size(A))    ;           \
-for(int i = 0; i <A->rows; i++)                                               \
-    for(int j=0; j <= i; j++){                                                 \
-        C->elements.TYPE[i * A->cols + j] = A->elements.TYPE[j * A->cols + i];\
-        C->elements.TYPE[j * A->cols + i] = A->elements.TYPE[i * A->cols + j];\
+#define TRANSPOSE(TYPE)                                                             \
+C->elements.TYPE = malloc(sizeof(*C->elements.TYPE) * size(A));                     \
+for(int i = 0; i <A->rows; i++)                                                     \
+    for(int j=0; j < A->cols; j++){                                                 \
+        C->elements.TYPE[j * C->cols + i] = A->elements.TYPE[i * A->cols + j];      \
     }
 
 Matrix *transpose(Matrix *A){
     if(A == NULL) return NULL;
     Matrix *C = new_matrix("ans", A->cols, A->rows, A->datatype);
     switch(A->datatype){
-        case short_int:     TRANSPOSE(short_int); break;
-        case integer:       TRANSPOSE(integer); break;
-        case floating:      TRANSPOSE(floating); break;
+        case short_int:     TRANSPOSE(short_int);   break;
+        case integer:       TRANSPOSE(integer);     break;
+        case floating:      TRANSPOSE(floating);    break;
         case double_prec:   TRANSPOSE(double_prec); break;
     }
     return C;
