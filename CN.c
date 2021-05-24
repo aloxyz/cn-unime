@@ -692,3 +692,24 @@ Matrix *vectorial_norm(Matrix *A, char *n, DataType type){
             return NULL;
     }
 }
+
+
+
+#define RANDOM_MATRIX(MATRIX, ROWS, COLS, TYPE)                                             \
+MATRIX->elements.TYPE = malloc(sizeof(*MATRIX->elements.TYPE)*size(MATRIX));                \
+for(int i=0; i<ROWS; i++)                                                                   \
+    for(int j=0; j<COLS; j++)                                                               \
+        MATRIX->elements.TYPE[i * COLS + j] = (double)rand()/(double)(RAND_MAX)*rand();
+
+
+Matrix *random_matrix(int rows, int cols, DataType type){
+    Matrix *A = new_matrix("ans", rows, cols, type);
+
+            switch(type){
+                case short_int:     RANDOM_MATRIX(A, rows, cols, short_int);      break;
+                case integer:       RANDOM_MATRIX(A, rows, cols, integer);        break;
+                case floating:      RANDOM_MATRIX(A, rows, cols, floating);       break;
+                case double_prec:   RANDOM_MATRIX(A, rows, cols, double_prec);    break;
+            }
+    return A;
+}

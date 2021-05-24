@@ -52,6 +52,7 @@ void print_info(Matrix *A);
 void matrix_typeconv(Matrix* A, DataType);                              //casts a matrix type to the argument
 void init_elements(Matrix *A, Pointer v);                                  
 Matrix *new_matrix(char *name, int rows, int cols, DataType t);     //creates a new matrix
+Matrix *random_matrix(int rows, int cols, DataType type);           //creates a random matrix with given dimensions and type
 
 //prompt functions
 void prompt_init_elements(Matrix *A);                           //initializes the elements of a matrix
