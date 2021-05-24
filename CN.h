@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include<math.h>
 
 //type definitions
 typedef enum DataType {
@@ -67,3 +68,10 @@ Matrix *matrix_seq_sum(Matrix *A);
 Matrix *dot_product(Matrix *A, Matrix *B);                      //returns dot product of A and B
 Matrix *transpose(Matrix *A);
 Matrix *v_tensor_prod(Matrix *A, Matrix *B);
+//vectorial norms
+Matrix *norm1(Matrix *A, DataType type);
+Matrix *norm2(Matrix *A, DataType type);
+Matrix *norm_inf(Matrix *A, DataType type);
+
+Matrix *p_norm(Matrix *A, unsigned long long n, DataType type); //unsure about adding a generic p norm
+Matrix *vectorial_norm(Matrix *A, char *n, DataType type);      //and a generic wrapper for every norm. (Adding latter's implementation for now)

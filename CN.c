@@ -518,3 +518,177 @@ Matrix *matrix_seq_sum(Matrix *A) {
     return ans;
 
 }
+
+#define NORM1(VECTOR, VECTYPE, ANS, ANSTYPE)                                \
+ANS->elements.ANSTYPE = malloc(sizeof(*ANS->elements.ANSTYPE));             \
+ANS->elements.ANSTYPE[0] = 0;                                               \
+for(int i = 0; i < size(VECTOR); i++)                                       \
+    if(VECTOR->elements.VECTYPE[i] < 0)                                     \
+        ANS->elements.ANSTYPE[0] -= VECTOR->elements.VECTYPE[i];            \
+    else                                                                    \
+        ANS->elements.ANSTYPE[0] += VECTOR->elements.VECTYPE[i];
+
+Matrix *norm1(Matrix *A, DataType type){
+    Matrix *tmp = new_matrix("ans", 1, 1, type);
+    
+    switch(A->datatype){
+        case short_int:
+            switch(type){
+            case short_int:     NORM1(A, short_int, tmp, short_int);   break;
+            case integer:       NORM1(A, short_int, tmp, integer);     break;
+            case floating:      NORM1(A, short_int, tmp, floating);    break;
+            case double_prec:   NORM1(A, short_int, tmp, double_prec); break;
+        }
+        break;
+        
+        case integer:
+            switch(type){
+            case short_int:     NORM1(A, integer, tmp, short_int);   break;
+            case integer:       NORM1(A, integer, tmp, integer);     break;
+            case floating:      NORM1(A, integer, tmp, floating);    break;
+            case double_prec:   NORM1(A, integer, tmp, double_prec); break;
+        }
+        break;
+
+        case floating:
+            switch(type){
+            case short_int:     NORM1(A, floating, tmp, short_int);   break;
+            case integer:       NORM1(A, floating, tmp, integer);     break;
+            case floating:      NORM1(A, floating, tmp, floating);    break;
+            case double_prec:   NORM1(A, floating, tmp, double_prec); break;
+        }
+        break;
+
+        case double_prec:
+            switch(type){
+            case short_int:     NORM1(A, double_prec, tmp, short_int);   break;
+            case integer:       NORM1(A, double_prec, tmp, integer);     break;
+            case floating:      NORM1(A, double_prec, tmp, floating);    break;
+            case double_prec:   NORM1(A, double_prec, tmp, double_prec); break;
+        }
+        break;
+    }
+    return tmp;
+}
+
+#define NORM2(VECTOR, VECTYPE, ANS, ANSTYPE)                                                   \
+ANS->elements.ANSTYPE = malloc(sizeof(*ANS->elements.ANSTYPE));                                \
+ANS->elements.ANSTYPE[0] = 0;                                                                  \
+for(int i = 0; i < size(VECTOR); i++)                                                          \
+    ANS->elements.ANSTYPE[0] += VECTOR->elements.VECTYPE[i] * VECTOR->elements.VECTYPE[i];     \
+ANS->elements.ANSTYPE[0] = sqrt(ANS->elements.ANSTYPE[0]);
+
+Matrix *norm2(Matrix *A, DataType type){
+    Matrix *tmp = new_matrix("ans", 1, 1, type);
+    
+    switch(A->datatype){
+        case short_int:
+            switch(type){
+            case short_int:     NORM2(A, short_int, tmp, short_int);   break;
+            case integer:       NORM2(A, short_int, tmp, integer);     break;
+            case floating:      NORM2(A, short_int, tmp, floating);    break;
+            case double_prec:   NORM2(A, short_int, tmp, double_prec); break;
+        }
+        break;
+        
+        case integer:
+            switch(type){
+            case short_int:     NORM2(A, integer, tmp, short_int);   break;
+            case integer:       NORM2(A, integer, tmp, integer);     break;
+            case floating:      NORM2(A, integer, tmp, floating);    break;
+            case double_prec:   NORM2(A, integer, tmp, double_prec); break;
+        }
+        break;
+
+        case floating:
+            switch(type){
+            case short_int:     NORM2(A, floating, tmp, short_int);   break;
+            case integer:       NORM2(A, floating, tmp, integer);     break;
+            case floating:      NORM2(A, floating, tmp, floating);    break;
+            case double_prec:   NORM2(A, floating, tmp, double_prec); break;
+        }
+        break;
+
+        case double_prec:
+            switch(type){
+            case short_int:     NORM2(A, double_prec, tmp, short_int);   break;
+            case integer:       NORM2(A, double_prec, tmp, integer);     break;
+            case floating:      NORM2(A, double_prec, tmp, floating);    break;
+            case double_prec:   NORM2(A, double_prec, tmp, double_prec); break;
+        }
+        break;
+    }
+    return tmp;
+}
+
+#define NORM_INF(VECTOR, VECTYPE, ANS, ANSTYPE)                                                   \
+ANS->elements.ANSTYPE = malloc(sizeof(*ANS->elements.ANSTYPE));                                   \
+ANS->elements.ANSTYPE[0] = 0;                                                                     \
+for(int i = 0; i < size(VECTOR); i++){                                                            \
+    if(VECTOR->elements.VECTYPE[i] > 0){                                                          \
+        if(VECTOR->elements.VECTYPE[i] > ANS->elements.ANSTYPE[0])                                \
+            ANS->elements.ANSTYPE[0] = VECTOR->elements.VECTYPE[i];                               \
+        }                                                                                         \
+    else                                                                                          \
+        if(-VECTOR->elements.VECTYPE[i] > ANS->elements.ANSTYPE[0])                               \
+            ANS->elements.ANSTYPE[0] = -VECTOR->elements.VECTYPE[i];                              \
+}
+Matrix *norm_inf(Matrix *A, DataType type){
+    Matrix *tmp = new_matrix("ans", 1, 1, type);
+    
+    switch(A->datatype){
+        case short_int:
+            switch(type){
+            case short_int:     NORM_INF(A, short_int, tmp, short_int);   break;
+            case integer:       NORM_INF(A, short_int, tmp, integer);     break;
+            case floating:      NORM_INF(A, short_int, tmp, floating);    break;
+            case double_prec:   NORM_INF(A, short_int, tmp, double_prec); break;
+        }
+        break;
+        
+        case integer:
+            switch(type){
+            case short_int:     NORM_INF(A, integer, tmp, short_int);   break;
+            case integer:       NORM_INF(A, integer, tmp, integer);     break;
+            case floating:      NORM_INF(A, integer, tmp, floating);    break;
+            case double_prec:   NORM_INF(A, integer, tmp, double_prec); break;
+        }
+        break;
+
+        case floating:
+            switch(type){
+            case short_int:     NORM_INF(A, floating, tmp, short_int);   break;
+            case integer:       NORM_INF(A, floating, tmp, integer);     break;
+            case floating:      NORM_INF(A, floating, tmp, floating);    break;
+            case double_prec:   NORM_INF(A, floating, tmp, double_prec); break;
+        }
+        break;
+
+        case double_prec:
+            switch(type){
+            case short_int:     NORM_INF(A, double_prec, tmp, short_int);   break;
+            case integer:       NORM_INF(A, double_prec, tmp, integer);     break;
+            case floating:      NORM_INF(A, double_prec, tmp, floating);    break;
+            case double_prec:   NORM_INF(A, double_prec, tmp, double_prec); break;
+        }
+        break;
+    }
+    return tmp;
+}
+
+Matrix *vectorial_norm(Matrix *A, char *n, DataType type){
+    char *lastn;
+    unsigned long long p = strtoull(n, &lastn, 10);
+    if(*lastn == 0){    //string was a number
+        if(p == 1)      return norm1(A, type); 
+        else if(p == 2) return norm2(A, type);
+        else;
+            //return p_norm(A, p, type);
+    }
+    else{
+        if(!strcmp(n, "inf"))
+            return norm_inf(A, type);
+        else
+            return NULL;
+    }
+}
