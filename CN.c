@@ -695,21 +695,21 @@ Matrix *vectorial_norm(Matrix *A, char *n, DataType type){
 
 
 
-#define RANDOM_MATRIX(MATRIX, ROWS, COLS, TYPE)                                             \
+#define RANDOM_MATRIX(MATRIX, ROWS, COLS, TYPE, MIN, MAX)                                             \
 MATRIX->elements.TYPE = malloc(sizeof(*MATRIX->elements.TYPE)*size(MATRIX));                \
 for(int i=0; i<ROWS; i++)                                                                   \
     for(int j=0; j<COLS; j++)                                                               \
-        MATRIX->elements.TYPE[i * COLS + j] = (double)rand()/(double)(RAND_MAX)*rand();
+        MATRIX->elements.TYPE[i * COLS + j] = (fabs(MAX)+ fabs(MIN)) * ((double)rand()/(double)(RAND_MAX)) - fabs(MIN);
 
 
-Matrix *random_matrix(int rows, int cols, DataType type){
+Matrix *random_matrix(int rows, int cols, DataType type, double range[]){
     Matrix *A = new_matrix("ans", rows, cols, type);
 
             switch(type){
-                case short_int:     RANDOM_MATRIX(A, rows, cols, short_int);      break;
-                case integer:       RANDOM_MATRIX(A, rows, cols, integer);        break;
-                case floating:      RANDOM_MATRIX(A, rows, cols, floating);       break;
-                case double_prec:   RANDOM_MATRIX(A, rows, cols, double_prec);    break;
+                case short_int:     RANDOM_MATRIX(A, rows, cols, short_int,     range[0] , range[1]);      break;
+                case integer:       RANDOM_MATRIX(A, rows, cols, integer,       range[0] , range[1]);      break;
+                case floating:      RANDOM_MATRIX(A, rows, cols, floating,      range[0] , range[1]);      break;
+                case double_prec:   RANDOM_MATRIX(A, rows, cols, double_prec,   range[0] , range[1]);      break;
             }
     return A;
 }
