@@ -53,6 +53,9 @@ void matrix_typeconv(Matrix* A, DataType);                              //casts 
 void init_elements(Matrix *A, Pointer v);                                  
 Matrix *new_matrix(char *name, int rows, int cols, DataType t);     //creates a new matrix
 Matrix *random_matrix(int rows, int cols, DataType type, double range[]);           //creates a random matrix with given dimensions and type in a given range
+Matrix *hilbert(int n, DataType type);
+Matrix *banded(int p, int q, int n);
+
 
 //prompt functions
 void prompt_init_elements(Matrix *A);                           //initializes the elements of a matrix
@@ -74,5 +77,3 @@ Matrix *norm1(Matrix *A, DataType type);
 Matrix *norm2(Matrix *A, DataType type);
 Matrix *norm_inf(Matrix *A, DataType type);
 
-Matrix *p_norm(Matrix *A, unsigned long long n, DataType type); //unsure about adding a generic p norm
-Matrix *vectorial_norm(Matrix *A, char *n, DataType type);      //and a generic wrapper for every norm. (Adding latter's implementation for now)

@@ -676,22 +676,6 @@ Matrix *norm_inf(Matrix *A, DataType type){
     return tmp;
 }
 
-Matrix *vectorial_norm(Matrix *A, char *n, DataType type){
-    char *lastn;
-    unsigned long long p = strtoull(n, &lastn, 10);
-    if(*lastn == 0){    //string was a number
-        if(p == 1)      return norm1(A, type); 
-        else if(p == 2) return norm2(A, type);
-        else;
-            //return p_norm(A, p, type);
-    }
-    else{
-        if(!strcmp(n, "inf"))
-            return norm_inf(A, type);
-        else
-            return NULL;
-    }
-}
 
 
 
@@ -711,5 +695,26 @@ Matrix *random_matrix(int rows, int cols, DataType type, double range[]){
                 case floating:      RANDOM_MATRIX(A, rows, cols, floating,      range[0] , range[1]);      break;
                 case double_prec:   RANDOM_MATRIX(A, rows, cols, double_prec,   range[0] , range[1]);      break;
             }
+    return A;
+}
+
+#define HILBERT(MATRIX, TYPE)                                           \
+for(int i = 0; i < MATRIX->rows; i++)                                   \
+    for(int j = 0; j < MATRIX -> cols; j++)                             \
+        MATRIX->elements.TYPE[i * MATRIX->cols + j] = (float)1 / (i + j + 1);    
+
+Matrix *hilbert(int n, DataType type){
+    if (n <= 0) return NULL;
+    
+    Matrix *A = new_matrix("ans", n, n, type);
+  
+       switch(type){
+        case short_int:   HILBERT(A, short_int);    break;
+        case integer:     HILBERT(A, integer);      break;
+        case floating:    HILBERT(A, floating);     break;
+        case double_prec: HILBERT(A, double_prec);  break;
+
+    }
+
     return A;
 }
