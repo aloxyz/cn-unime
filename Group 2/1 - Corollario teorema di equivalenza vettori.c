@@ -17,9 +17,9 @@ int main(){
     Matrix *A = new_matrix("A", 1, n, double_prec);
     prompt_init_elements(A);
 
-    verify(norm_inf(A, double_prec)->elements.double_prec[0], norm2(A, double_prec)->elements.double_prec[0], sqrt(size(A)));
-    verify(norm2(A, double_prec)->elements.double_prec[0], norm1(A, double_prec)->elements.double_prec[0], sqrt(size(A)));
-    verify(norm_inf(A, double_prec)->elements.double_prec[0], norm1(A, double_prec)->elements.double_prec[0], size(A));
+    verify(vec_norm_inf(A, double_prec)->elements.double_prec[0], vec_norm2(A, double_prec)->elements.double_prec[0], sqrt(size(A)));
+    verify(vec_norm2(A, double_prec)->elements.double_prec[0], vec_norm1(A, double_prec)->elements.double_prec[0], sqrt(size(A)));
+    verify(vec_norm_inf(A, double_prec)->elements.double_prec[0], vec_norm1(A, double_prec)->elements.double_prec[0], size(A));
     
     return 0;
 }

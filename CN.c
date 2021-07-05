@@ -756,6 +756,28 @@ Matrix *random_matrix(int rows, int cols, DataType type, double range[]){
     return A;
 }
 
+#define RANDOM_TRIDIAGONAL_MATRIX(MATRIX, N, TYPE, MIN, MAX)                                                    \
+MATRIX->elements.TYPE = malloc(sizeof(*MATRIX->elements.TYPE)*size(MATRIX));                                    \
+for(int i=0; i<N; i++)                                                                                          \
+    for(int j = 0; j < n; j++)                                                                                  \
+        if(j<i-1 || j > i+1)                                                                                    \
+            MATRIX->elements.TYPE[i * N + j] = 0;                                                               \
+        else                                                                                                    \
+            MATRIX->elements.TYPE[i * N + j] = (fabs(MAX)+ fabs(MIN)) * ((double)rand()/(double)(RAND_MAX)) - fabs(MIN);
+
+
+Matrix *random_tridiagonal(int n, DataType type, double range[]){
+    Matrix *A = new_matrix("ans", n, n, type);
+
+            switch(type){
+                case short_int:    RANDOM_TRIDIAGONAL_MATRIX(A, n, short_int,     range[0] , range[1]);      break;
+                case integer:      RANDOM_TRIDIAGONAL_MATRIX(A, n, integer,       range[0] , range[1]);      break;
+                case floating:     RANDOM_TRIDIAGONAL_MATRIX(A, n, floating,      range[0] , range[1]);      break;
+                case double_prec:  RANDOM_TRIDIAGONAL_MATRIX(A, n, double_prec,   range[0] , range[1]);      break;
+            }
+    return A;
+}
+
 #define HILBERT(MATRIX, TYPE)                                                   \
 MATRIX->elements.TYPE = malloc(sizeof(*MATRIX->elements.TYPE)*size(MATRIX));    \
 for(int i = 0; i < MATRIX->rows; i++)                                           \
