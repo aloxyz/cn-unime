@@ -73,7 +73,11 @@ Matrix *dot_product(Matrix *A, Matrix *B);                      //returns dot pr
 Matrix *transpose(Matrix *A);
 Matrix *v_tensor_prod(Matrix *A, Matrix *B);
 //vectorial norms
-Matrix *norm1(Matrix *A, DataType type);
-Matrix *norm2(Matrix *A, DataType type);
-Matrix *norm_inf(Matrix *A, DataType type);
+Matrix *vec_norm1(Matrix *A, DataType type);
+Matrix *vec_norm2(Matrix *A, DataType type);
+Matrix *vec_norm_inf(Matrix *A, DataType type);
 
+//matrix norms
+Matrix *matrix_norm1(Matrix *A, DataType type);
+Matrix *matrix_norm2(Matrix *A, DataType type);
+Matrix *matrix_norm_inf(Matrix *A, DataType type);
