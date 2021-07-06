@@ -149,7 +149,7 @@ Matrix *gaussian_elimination(Matrix *A, Matrix *b){
         case double_prec:   GAUSS_ELIMINATION(tmp, A, double_prec, b)     break;
     }
 
-    Matrix* result = backwards_substitution(A, b);
+    Matrix *result = backwards_substitution(A, b);
 
     if (casted == Acasted)  matrix_typeconv(A, tmp_datatype);
     else    matrix_typeconv(b, tmp_datatype);
