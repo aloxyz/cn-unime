@@ -413,6 +413,9 @@ Matrix *dot_product(Matrix *A, Matrix *B){
         case floating:      DOT_PRODUCT(floating);      break;
         case double_prec:   DOT_PRODUCT(double_prec);   break;
     }
+
+    if (casted == Acasted)  matrix_typeconv(A, tmp_datatype);
+    else    matrix_typeconv(B, tmp_datatype);
     return C;
     }
     return NULL;

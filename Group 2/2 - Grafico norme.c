@@ -10,9 +10,9 @@
     while(range_dimension[0] <= range_dimension[1]){\
         vector = random_matrix(1, range_dimension[0], TYPE, range_elements);                \
         print_matrix(vector); \
-        fprintf(uno, "%d " FORMAT, range_dimension[0], norm1(vector, TYPE)->elements.TYPE[0]);\
-        fprintf(due, "%d " FORMAT, range_dimension[0], norm2(vector, TYPE)->elements.TYPE[0]);\
-        fprintf(inf, "%d " FORMAT, range_dimension[0], norm_inf(vector, TYPE)->elements.TYPE[0]);\
+        fprintf(uno, "%d " FORMAT, range_dimension[0], vec_norm1(vector, TYPE)->elements.TYPE[0]);\
+        fprintf(due, "%d " FORMAT, range_dimension[0], vec_norm2(vector, TYPE)->elements.TYPE[0]);\
+        fprintf(inf, "%d " FORMAT, range_dimension[0], vec_norm_inf(vector, TYPE)->elements.TYPE[0]);\
 \
         range_dimension[0]++;\
         free(vector);        \
