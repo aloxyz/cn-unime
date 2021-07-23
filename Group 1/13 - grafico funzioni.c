@@ -17,6 +17,7 @@ void function1(range D, double step){
         y = 1/(1+25*(x*x));
         fprintf(fp, "%lf %lf\n", x, y);
     }
+    fclose(fp);
 }
 
 void function2(range D, double step){
@@ -25,6 +26,7 @@ void function2(range D, double step){
         y = x/(1+(x*x));
         fprintf(fp, "%lf %lf\n", x, y);
     }
+    fclose(fp);
 }
 
 void function3(range D, double step){
@@ -33,6 +35,7 @@ void function3(range D, double step){
         y = fabs(x);
         fprintf(fp, "%lf %lf\n", x, y);
     }
+    fclose(fp);
 }
 
 int main(){
