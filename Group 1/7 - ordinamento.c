@@ -2,6 +2,12 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define WRAPPER(FORMAT, TYPE)                                                   \
+    array = malloc(sizeof(array->TYPE) * n);                                    \
+    INITIALIZE(FORMAT, TYPE);                                                   \
+    BUBBLE_SORT_NUMBERS(TYPE);                                                  \
+    PRINT_ARRAY(FORMAT, TYPE);
+
 #define INITIALIZE(FORMAT, TYPE)                                               \
   for (int i = 0; i < n; i++)                                                  \
     scanf(FORMAT, &array[i].TYPE);                                             \
@@ -53,27 +59,8 @@ int main() {
   printf("1 per short int, 2 per int, 3 per float 4 per double and s per string: ");
   scanf(" %c", &choice);
 
-  if (choice == '1') {
-    array = malloc(sizeof(array->short_int) * n);
-    INITIALIZE("%hd", short_int);
-    BUBBLE_SORT_NUMBERS(short_int);
-    PRINT_ARRAY("%hd", short_int);
-
-  } else if (choice == '2') {
-    array = malloc(sizeof(array->integer) * n);
-    INITIALIZE("%d", integer);
-    BUBBLE_SORT_NUMBERS(integer);
-    PRINT_ARRAY("%d", integer);
-
-  } else if (choice == '3') {
-    array = malloc(sizeof(array->floating) * n);
-    INITIALIZE("%f", floating);
-    BUBBLE_SORT_NUMBERS(floating);
-    PRINT_ARRAY("%.10f", floating);
-  
-  } else if (choice == 's') {
-    
-    array = malloc(sizeof(char*) * n);
+switch(choice){
+  case 's': array = malloc(sizeof(char*) * n);
     for (int i = 0; i < n; i++) {
       scanf("%s", array[i].word);
     }
@@ -81,15 +68,16 @@ int main() {
     
     BUBBLE_SORT_STRINGS()
     PRINT_ARRAY("%s", word);
+    break;
+
+  case '1':     WRAPPER("%hd", short_int); break;
+  case '2':     WRAPPER("%d", integer); break;
+  case '3':     WRAPPER("%f", floating); break;
   
-  } else {
-    if (choice != '4')
-      printf("Scelta non valida, selezionata la precisione doppia come "
-             "default.\n");
-    array = malloc(sizeof(array->double_prec) * n);
-    INITIALIZE("%lf", double_prec);
-    BUBBLE_SORT_NUMBERS(double_prec);
-    PRINT_ARRAY("%.16lf", double_prec);
-  }
+  default:      if (choice != '4')
+                printf("Scelta non valida, selezionata la precisione doppia come "
+                "default.\n");      
+                WRAPPER("%lf", double_prec); break;
+}
   return 0;
 }
