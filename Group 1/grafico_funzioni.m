@@ -3,24 +3,16 @@
 
 figure(1)
 legenda = [];
-if isfile("dati1")
-    A = readmatrix('dati1');
-    plot(A(:,1), A(:,2), 'r');
-    hold on
-    legenda = [legenda, "1/(1+25*(x*x))"];
-end
-
-if isfile("dati2")
-    A = readmatrix('dati2');
-    plot(A(:,1), A(:,2), 'b');
-    hold on
-    legenda = [legenda, "x/(1+(x*x))"];
-end
-
-if isfile("dati3")
-    A = readmatrix('dati3');
-    plot(A(:,1), A(:,2), 'g');
-    legenda = [legenda, "|x|"];
+dati = ["dati1", "dati2", "dati3"];
+funzioni = ["1/(1+25*(x*x))", "x/(1+(x*x))", "|x|"];
+colori = ['r', 'b', 'g'];
+for i = 1:3
+    if isfile(dati(1))
+        A = readmatrix(dati(i));
+        plot(A(:,1), A(:,2), colori(i));
+        hold on
+        legenda = [legenda, funzioni(i)];
+    end
 end
 
 legend(legenda);
