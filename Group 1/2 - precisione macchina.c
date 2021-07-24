@@ -22,7 +22,7 @@ int main() {
   typedef union {
     float floating;
     double double_prec;
-  } precision;
+  } precision;    //utilizzo dell'union per ridurre il numero di variabili esistenti e quindi la memoria utilizzata
 
   precision somma, eps;
     printf("Precisione singola:\n");

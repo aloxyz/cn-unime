@@ -1,4 +1,4 @@
-//dato in input un numero n e n numeri ne calcola la sommatoria e la produttoria
+//dato in input un numero n e n numeri reali ne calcola la sommatoria e la produttoria
 #include <stdio.h>
 #include <stdlib.h>
 

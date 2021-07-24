@@ -1,9 +1,10 @@
+//Dati una matrice A di ordine n ed un vettore x di n componenti calcolare Ax e xT A.
 #include "..\CN.h"
 
 int main(){
   
     
-    Matrix *A, *B, *C, *D;
+    Matrix *A, *B, *C;
 
     A = prompt_matrix();
     B = prompt_matrix();

@@ -1,4 +1,4 @@
-//Prende in input n numeri e ne fa la media
+//Prende in input n numeri reali o interi e ne fa la media
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -27,9 +27,9 @@ int main() {
     scanf("%d", &size);
     printf("inizializzare il vettore\n>> ");
 
-    if(t <= 1)      {AVERAGE(sum.short_int, "%hd", x.short_int)}
+    if(t <= 1)      {AVERAGE(sum.short_int, "%hd", x.short_int)}        //lavora in short se la scelta è minore o uguale a 1
     else if(t == 2) {AVERAGE(sum.integer, "%d", x.integer)}
     else if(t == 3) {AVERAGE(sum.floating, "%f", x.floating)}
-    else if(t >= 4) {AVERAGE(sum.double_prec, "%lf", x.double_prec)}
+    else if(t >= 4) {AVERAGE(sum.double_prec, "%lf", x.double_prec)}    //lavora in double se la scelta è maggiore o uguale a 4
 
 }

@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include<stdlib.h>
 
-int main(int argc, char **argv) {
+int main(int argc, char **argv) {   //numero da inserire come argomento del programma chiamato
 
     int max = atoi(argv[1]);
     int fac_int=1;
