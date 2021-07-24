@@ -1,3 +1,6 @@
+%Fa il grafico delle norme studiate per le matrici prese in considerazione,
+%per l'ordine delle matrici che varia da 2 a n
+
 n = input("Inserisci ordine massimo: ")
 
 %Inizializza matrice 4 * 3.
@@ -29,38 +32,9 @@ for z = 2:n
     
 end
 
-display("Norm 1")
-    for j = 1:3
-        conds{1,j}
-    end
 
-display("Norm 2")
-    for j = 1:3
-        conds{2,j}
-    end
-    
-display("Norm Frobenius")
-    for j = 1:3
-        conds{3,j}
-    end
-    
-display("Norm Inf")
-    for j = 1:3
-        conds{4,j}
-    end
-    
-range = 2:n
+range = 2:n;
 figure(1);
-plot(range,log(conds{1,1}), "r*");
-hold on
-plot(range,log(conds{1,2}), "b*");
-plot(range,log(conds{1,3}), "y*");
-legend('Vandermonde','Hilbert','Tridiagonale')
-xlim([2,n])
-ylim([1,log(max(max(cat(3, conds{1,1}, conds{1,2}, conds{1,3}))))])
-ylabel("Indici di condizionamento");
-xlabel("Ordine matrici");
-
 for i=1:4
     subplot(2,2,i);
     plot(range,log(conds{i,1}), "r*");
@@ -68,10 +42,9 @@ for i=1:4
     plot(range,log(conds{i,2}), "b*");
     plot(range,log(conds{i,3}), "y*");
     legend('Vandermonde','Hilbert','Tridiagonale')
-    xlim([2,n])
-    ylim([1,log(max(max(cat(3, conds{i,1}, conds{i,2}, conds{i,3}))))])
-    ylabel("Indici di condizionamento");
+    ylabel("Indici di condizionamento (scala log)");
     xlabel("Ordine matrici");
+    
     if i == 1
         title("Norma 1")
     elseif i==2

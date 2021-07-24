@@ -1,3 +1,4 @@
+%Calcola le 4 norme matriciali studiate delle 3 matrici di ordine n
 n = input("Ordine matrici: ");
 %Saranno usate: 
 %Matrice di Vandermonde
@@ -8,11 +9,11 @@ n = input("Ordine matrici: ");
 
 
 r1 = rand(n, 1);
-V = vander(r1)
-H = hilb(n)
+V = vander(r1);
+H = hilb(n);
 
 r2 = rand((n-1), 1);
-D = diag(r1) + diag(r2, +1) + diag(r2, -1)
+D = diag(r1) + diag(r2, +1) + diag(r2, -1);
 
 norms = zeros(4,3);
 M = {V, H, D};
@@ -23,8 +24,8 @@ for k = 1:3
         norms(3,k) = normFro(M{k}, n);
         norms(4,k) = normInf(M{k}, n);
 end
-disp 'Vandermonde, Hilbert, Tridiagonal'
-norms
+
+uitable(figure(2), 'Data', norms, 'ColumnName',{'Vandermonde', 'Hilbert', 'Tridiagonale'}, 'RowName', {'1', '2', 'Fro', 'Inf'});
 
 function result = norm1(matrix, n)
     result = 0;
