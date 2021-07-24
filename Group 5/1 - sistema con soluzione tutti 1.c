@@ -17,8 +17,8 @@ for(int i = 0; i<MATRIX->rows; i++){                                            
         VECTOR->elements.TYPE[i] += MATRIX->elements.TYPE[i * MATRIX->cols + j];    \
 }
 
-Matrix* vector_sum(Matrix* A){
-    Matrix *vec = new_matrix("b", 1, A->rows, A->datatype);
+Matrix* vector_sum(Matrix* A){                  //genera un vettore che ha come i-esima componente la somma degli elementi sulla i-esima riga
+    Matrix *vec = new_matrix("b", A->rows, 1, A->datatype);
 
     switch(A->datatype){
         case short_int:     VECTOR_SUM(A, vec, short_int); break;
@@ -34,7 +34,7 @@ Matrix* vector_sum(Matrix* A){
     for(int i=0; i<N; i++)                                      \
         VEC->elements.TYPE[i] = -1;                              
 
-Matrix *vec_ones(int n, DataType type){
+Matrix *vec_ones(int n, DataType type){         //genera un vettore che abbia tutti gli elementi uguali a -1
     Matrix *tmp = new_matrix("ones", n, 1, type);
     switch(type){
         case short_int:     VEC_ONES(tmp, n, short_int);    break;
@@ -49,7 +49,7 @@ Matrix *vec_ones(int n, DataType type){
 int main(){
 
     double range[2];
-    Matrix *A, *x, *result;
+    Matrix *A, *x, *b, *result;
     int n;
     DataType type;
     printf("Inserisci ordine della matrice\n");
@@ -64,18 +64,21 @@ int main(){
 
     printf("scegliere tra\n1. short_int\n2. integer\n3. floating\n4. double_prec\n>> ");
     scanf("%d", &type);
-    if(type < 1 || type > 4) type = 1;
+    if(type < 1 || type > 4) type = 4; //se il tipo inserito è sbagliato, viene automaticamente selezionato il tipo double
 
     A = random_matrix(n, n, type, range);
     printf("Risultato calcolato del sistema lineare:\n");
     print_matrix(A);
-    print_matrix(vector_sum(A));
-    x = gaussian_elimination(A, vector_sum(A));
+    b = vector_sum(A);
+    print_matrix(b);
+    x = gaussian_elimination(A, b);
     print_matrix(x);
 
     result = vec_ones(n, type);
     printf("L'errore relativo tra il risultato calcolato e quello effettivo e':");
-    printf("%lf", vec_norm_inf(matrix_sum(x,result), double_prec)->elements.double_prec[0]/vec_norm_inf(result, double_prec)->elements.double_prec[0] * (-1));
+    
+    //norma della differenza tra soluzione calcolata e soluzione vera diviso la norma della soluzione vera.
+    printf("%e", vec_norm_inf(matrix_sum(x,result), double_prec)->elements.double_prec[0]/vec_norm_inf(result, double_prec)->elements.double_prec[0]);
 
     return 0;
 }
