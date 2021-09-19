@@ -1,5 +1,6 @@
 n = input("Inserire ordine massimo: ");
 S = {0,0,{},{{0,0},{0,0}}};
+%{Matrice, vettore b, {Gauss, Cholesky}, {{Jacobi, errore}, {Gauss-Seidel, errore}}}
 S = {S, S, S, S, S};
 %Ciclo che genera 5 matrici di hilbert con ordini da n-4 a a n
 %e 5 vettori con componenti la somma degli elementi sulle righe della
@@ -25,11 +26,11 @@ figure(1)
 for i = 1:5
     subplot(3,2,i)
     y1 = (S{i}{4}{1}{2});
-    plot(1:max(size(y1)),log(y1), "r-");
+    plot(1:max(size(y1)),log(y1), "r");
     hold on    
 
     y2 = (S{i}{4}{2}{2});
-    plot(1:max(size(y2)),log(y2),"b-");
+    plot(1:max(size(y2)),log(y2),"b");
     hold on
     
     legend('Jacobi','Gauss-Seidel')
@@ -196,7 +197,7 @@ end
 %Verifica se la matrice di iterazione A è convergente alla soluzione x*
 function x = convergenza(A)
     
-    if max(eig(A)) < 1 %norma2 < 1 
+    if max(eig(A)) < 1 %massimo degli autovalori < 1 
         x = 1;
     else
         x = 0;
@@ -225,7 +226,7 @@ function Dati = jacobi(A,b,x) %Spostamenti simultanei
             end
             Dati{2} = [Dati{2}, norm(x-x2,'inf')];
             if Dati{2}(k)<0.01 || Dati{2}(k) == Inf %Termina il metodo se l'errore è molto piccolo o se diventa non convergente
-                    Dati{2} = Dati{2}(1:end-1);
+                    Dati{2} = Dati{2}(1:end-1); %Rimuove Inf dal vettore degli errori
                     Dati{1} = x2;
                     return
             

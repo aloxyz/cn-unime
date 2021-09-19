@@ -19,8 +19,9 @@ D = diag(r1) + diag(r2, +1) + diag(r2, -1);
 
 
 M = {V, H, D};
+names = ["Vandermonde", "Hilbert", "Tridiagonale"];
 for i = 1:3
-    display("M{"+i+"}")
+    display(names(i))
     
     verify(1/sqrt(n)*norm(M{i},'inf'), norm(M{i}, 2), sqrt(n)*norm(M{i},'inf'))
     verify(1/sqrt(n)*norm(M{i},1), norm(M{i}, 2), sqrt(n)*norm(M{i},1))
@@ -32,9 +33,10 @@ for i = 1:3
     else
         display("Non verificato")
     end
+    
 end
 
-function verify(a,b,c)
+function verify(a,b,c) %Verifica se a <= b <= c
 
 display(a+" <= " + b + " <= "+ c)
     if a <= b && b <= c

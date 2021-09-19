@@ -8,7 +8,7 @@ per un generico vettore in input di n componenti
 
 #include "..\CN.h"
 
-void verify(double normA, double normB, double scalar);
+void verify(double normA, double normB, double scalar); //Verifica la disuguaglianza normA <= normB <= scalar*normA
 
 int main(){
     int n;
@@ -24,7 +24,7 @@ int main(){
     return 0;
 }
 
-void verify(double normA, double normB, double scalar){         //Verifica la disuguaglianza normA <= normB <= scalar*normA
+void verify(double normA, double normB, double scalar){         
 
     printf("%.lf <= %lf <= %lf * %lf\n", normA, normB, scalar, normA);
     if(normA <= normB && normB <= scalar * normA) printf("Vero\n");

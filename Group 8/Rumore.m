@@ -11,14 +11,14 @@ r = 0.1*sin(7*x)+2*sin(23*x).*cos(31*x).*sin(1-19*x); %Funzione rumore
 f = s + r; %ordinate punti di approssimazione
 
 xg = union(linspace(range(1), range(2), 1000),x); %ascisse punti di graficazione
-yg = {((xg-1.2).*sin(3*xg)+sin(1+xg.*xg)./(xg+1)).*sin(xg/2)}; %ordinate punti di graficazione
+yg = {((xg-1.2).*sin(3*xg)+sin(1+xg.*xg)./(xg+1)).*sin(xg/2)}; %ordinate punti di graficazione {vere, calcolate}
 fg = yg{1} + (0.1*sin(7*xg)+2*sin(23*xg).*cos(31*xg).*sin(1-19*xg));
 errori = ones(1,points-2);
 
 minimum = Inf;
 for i = 2:points-1
    V = flip(vander(x),2);
-   V = V(:,1:i);
+   V = V(:,1:i);             %Viene tagliata la matrice per considerare solo i primi i-esimi punti
    a = flip(linsolve(V,f')); %Polinomio approssimante di grado i
    pn = polyval(a,x);
    

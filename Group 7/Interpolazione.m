@@ -3,14 +3,21 @@
 % punti equidistanti. Analizzare il grafico degli errori. 
 
 
-tabs = {{{{},{}},{},{}}, {{{},{}},{},{}}, {{{},{}},{},{}}, {{{},{}},{},{}}, {{{},{}},{},{}}, {{{},{}},{},{}}, {{},{}}};
-tabulati = {{tabs, tabs, tabs}, {tabs, tabs, tabs}};
-sizes = [5, 6, 11, 12, 20, 25];
+tabs = {{{{},{}},{},{}},    %5 punti: {{{x base},{y base}},{polinomio},{y calcolate}}
+        {{{},{}},{},{}},    % //
+        {{{},{}},{},{}},    % //
+        {{{},{}},{},{}}, 
+        {{{},{}},{},{}}, 
+        {{{},{}},{},{}},    % //
+        {{},{}}};           % {{x graficazione},{y graficazione vere}}
+    
+%In questo caso func3 = func2 solo che in intervalli diversi
+tabulati = {{tabs, tabs, tabs}, {tabs, tabs, tabs}}; %{punti equidistanti: {func1, func2, func3}, 
+sizes = [5, 6, 11, 12, 20, 25];                      % punti non equidistanti: {func1, func2, func3}}   
 range1 = [-1, 1];
 range2 = [-10, 10];
+
 for i = 1:6 %crea i tabulati di punti
-        
-    
     for j = 1:2
         for k = 1:3
         tabulati{j}{k}{i}{1}{2} = ones(sizes(i),1);        
@@ -20,11 +27,12 @@ for i = 1:6 %crea i tabulati di punti
     for k = 1:3
         tabulati{2}{k}{i}{1}{1} = ones(sizes(i),1);
     end
-    %Inizializza le x dei punti di interpolazione
+    %Inizializza le x equidistnati dei punti di interpolazione
     tabulati{1}{1}{i}{1}{1} = linspace(range1(1), range1(2), (sizes(i)));
     tabulati{1}{2}{i}{1}{1} = linspace(range1(1), range1(2), (sizes(i)));
     tabulati{1}{3}{i}{1}{1} = linspace(range2(1), range2(2), (sizes(i)));
     
+    %Inizializza le x non equidistanti dei punti di interpolazione
     for j = 1:sizes(i)
             tabulati{2}{1}{i}{1}{1}(j) = points1(j, sizes(i));
             tabulati{2}{2}{i}{1}{1}(j) = points1(j, sizes(i));
@@ -46,20 +54,22 @@ for i = 1:6 %crea i tabulati di punti
     end
 end
 
-%Inizializza le x delle 3 funzioni
+%Inizializza le x di graficazione delle 3 funzioni
 points = 200;
 for k = 1:2
     for i = 1:3
-        tabulati{k}{i}{7}{1} = ones(1,points);
-    
-        for j = 1:6
-        tabulati{k}{i}{7}{1} = union(tabulati{k}{i}{7}{1}, tabulati{k}{i}{j}{1}{1});
+        tabulati{k}{i}{7}{1} = [];
+        for j = 1:6 
+            %Fa in modo che nelle x di graficazione ci siano tutte le x base d'interpolazione
+            %della funzione attuale
+            tabulati{k}{i}{7}{1} = union(tabulati{k}{i}{7}{1}, tabulati{k}{i}{j}{1}{1});
         end
     end
 end
 
 for k = 1:2
-
+%Fa in modo che le x di graficazione siano esattamente quante scelte in
+%"points" e che le x della base di interpolazione siano incluse
 tabulati{k}{1}{7}{1} = union(linspace(range1(1), range1(2), points-max(size(tabulati{k}{1}{7}{1}))), tabulati{k}{1}{7}{1});
 tabulati{k}{2}{7}{1} = union(linspace(range1(1), range1(2), points-max(size(tabulati{k}{2}{7}{1}))), tabulati{k}{2}{7}{1});
 tabulati{k}{3}{7}{1} = union(linspace(range2(1), range2(2), points-max(size(tabulati{k}{3}{7}{1}))), tabulati{k}{3}{7}{1});
@@ -73,7 +83,7 @@ for k = 1:2
 end
 
 for k = 1:2
-    %Calcola le y delle 3 funzioni
+    %Calcola le y delle 3 funzioni nei punti di graficazione
     for j = 1:max(size(tabulati{k}{1}{7}{1}))
         tabulati{k}{1}{7}{2}(j) = func1(tabulati{k}{1}{7}{1}(j));
     end
@@ -87,7 +97,7 @@ for k = 1:2
     end
 end
 
-%Calcola il valore di ogni ordinata per ogni polinomio interpolatore
+%Calcola il valore di ogni y di graficazione per ogni polinomio interpolatore
 for k = 1:2
     for i = 1:3
         n = max(size(tabulati{k}{i}{7}{1}));
@@ -123,6 +133,7 @@ for k = 1:2
         
     end
 end
+
 norma_errori = ones(6,3);
 norma_errori = {norma_errori,norma_errori};
 %Plotta gli errori
@@ -143,7 +154,7 @@ for j = 1:3
             if massimo < max(errore)
                 massimo = max(errore);
             end
-            names = [names, "Grado" + (max(size(tabulati{k}{j}{i}{2}))-1)];
+            names = [names, "Grado " + (max(size(tabulati{k}{j}{i}{2}))-1)];
             
             if k == 1
                 title("Punti equidistanti");
@@ -158,10 +169,10 @@ for j = 1:3
 end
 
 uitable(figure(10), 'Data', norma_errori{1}, 'ColumnName',1:3, 'RowName', (sizes-1));
-title("Punti equidistanti")
+title("Norma errori: punti equidistanti")
 
 uitable(figure(11), 'Data', norma_errori{2}, 'ColumnName',1:3, 'RowName', (sizes-1));
-title("Punti non equidistanti")
+title("Norma errori: punti non equidistanti")
 
 function y = func1(x)       %definita in [-1, 1]
     y = 1/(1 + 25 * x * x);
@@ -178,28 +189,31 @@ n = max((size(x)));            %restituisce il polinomio interpolatore
 coeff = zeros(1,n);            %sottoforma di vettore 
     for i = 1:n                %utilizzando l'interpolazione di Lagrange 
         tmp = [1];
+        %Varia j da 1 a n per j diverso da i
         for j = 1:i-1
             tmp1 = tmp;
+            %Viene scomposto tmp*(x-xj) in tmp*x - tmp*xj
             for k = max(size(tmp)):-1:1
-                tmp(k+1)= tmp(k);
-                tmp1(k) = -tmp1(k) * x(j);
+                tmp(k+1)= tmp(k);           %Moltiplica tmp per x (sposta ogni elemento a destra)
+                tmp1(k) = tmp1(k) * x(j);   %Moltiplica ogni elemento per xj cambiando di segno
             end
-            tmp1 = [tmp1, 0];
-            tmp(1) = 0;
+            tmp(1) = 0; %Gli elementi sono stati spostati a destra ed è 
+                        %necessario che il primo venga azzerato
             
-            tmp = tmp + tmp1;
+            tmp1 = [tmp1, 0]; %Il vettore viene allargato per far sì che combacino le dimensioni con tmp
+
+            tmp = tmp - tmp1;               
             tmp = tmp/(x(i)-x(j));
         end
         for j = i+1:n
             tmp1 = tmp;
             for k = max(size(tmp)):-1:1
                 tmp(k+1)= tmp(k);
-                tmp1(k) = -tmp1(k) * x(j);
+                tmp1(k) = tmp1(k) * x(j);
             end
-            tmp1 = [tmp1, 0];
             tmp(1) = 0;
-            
-            tmp = tmp + tmp1;
+            tmp1 = [tmp1, 0];
+            tmp = tmp - tmp1;
             tmp = tmp/(x(i)-x(j));          
         end
         coeff = coeff + (tmp * y(i));
@@ -207,18 +221,13 @@ coeff = zeros(1,n);            %sottoforma di vettore
 coeff = coeff(1:find(coeff, 1, 'last'));
 end
 
-function y  = solve(x, polynomial)  
-    
-    y = polynomial(1);
+function y  = solve(x, polynomial)  %Ruffini-Horner
+    %a + bx + cx^2 + dx^3 = a+x(b + x(c + dx)
     n = max(size(polynomial));
-    for i = 2:n
-       z = 1;        
-       if polynomial(i)~=0
-            for j = 2:i
-                z = z * x;
-            end
-            y = y + (z*polynomial(i));
-       end
+    y = polynomial(n);
+    
+    for i = n-1: -1: 1
+        y = x*y + polynomial(i);
     end
 end
 

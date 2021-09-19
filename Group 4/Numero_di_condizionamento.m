@@ -1,4 +1,4 @@
-%Fa il grafico delle norme studiate per le matrici prese in considerazione,
+%Fa il grafico degli indici di condizionamento delle matrici prese in considerazione,
 %per l'ordine delle matrici che varia da 2 a n
 
 n = input("Inserisci ordine massimo: ")
@@ -23,7 +23,7 @@ for z = 2:n
     D = diag(r1) + diag(r2, +1) + diag(r2, -1);
     
     M = {V, H, D};
-    for j= 1:3
+    for j= 1:3 %Calcola gli indici di condizionamento
         conds{1,j}(z-1) = norm(inv(M{j}), 1)*norm(M{j}, 1);
 		conds{3,j}(z-1) = norm(inv(M{j}), 2)*norm(M{j}, 2);		
 		conds{2,j}(z-1) = norm(inv(M{j}), "fro")*norm(M{j}, "fro");

@@ -6,7 +6,7 @@ legenda = [];
 dati = ["norma 1", "norma 2", "norma inf"];
 colori = ['r', 'b', 'g'];
 for i = 1:3
-    if isfile(dati(1))
+    if isfile(dati(i))
         A = readmatrix(dati(i));
         plot(A(:,1), A(:,2), colori(i));
         hold on

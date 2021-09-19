@@ -88,6 +88,7 @@ Matrix *backwards_substitution(Matrix *A, Matrix* b){
   TMP->elements.TYPE = malloc(sizeof(*TMP->elements.TYPE));                                                                                      \
     for(int k = 0, l; k<MATRIX->cols-1; k++){                                                                                                    \
         TMP->elements.TYPE[0] = 0;                                                                                                               \
+        /*trova l'elemento massimo della colonna*/                                                                                               \
         for(int i = 0; i<MATRIX->rows; i++){                                                                                                     \
             if(TYPE >= floating){                                                                                                                \
                 if(TMP->elements.TYPE[0] < fabs(MATRIX->elements.TYPE[i * MATRIX->cols + k])) {                                                  \
@@ -101,7 +102,9 @@ Matrix *backwards_substitution(Matrix *A, Matrix* b){
                     l = i;                                                                                                                       \
                 }                                                                                                                                \
         }                                                                                                                                        \
+        /*Interrompe l'algoritmo se il massimo elemento della colonna è 0*/                                                                      \
         if  (TMP->elements.TYPE[0] == 0) return NULL;                                                                                            \
+        /*Se necessario scambia la riga con l'attuale pivot con la riga col nuovo pivot scelto*/                                                 \
         if (l != k){                                                                                                                             \
             for(int j = k; j<MATRIX->cols; j++){                                                                                                 \
                 TMP->elements.TYPE[0] = MATRIX->elements.TYPE[k * MATRIX->cols + j];                                                             \
@@ -123,7 +126,7 @@ Matrix *backwards_substitution(Matrix *A, Matrix* b){
             B->elements.TYPE[i]-=TMP->elements.TYPE[0] * B->elements.TYPE[k];                                                                    \
         }                                                                                                                                        \
     }                                                                                                                                            \
-    if(MATRIX->elements.TYPE[size(MATRIX)-1] == 0) return NULL;
+    if(MATRIX->elements.TYPE[size(MATRIX)-1] == 0) return NULL; //arresta l'algoritmo se l'ultimo pivot risulta = 0
 
 Matrix *gaussian_elimination(Matrix *A, Matrix *b){
 

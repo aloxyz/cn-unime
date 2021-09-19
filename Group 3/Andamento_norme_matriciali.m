@@ -3,9 +3,8 @@
 n = input("Ordine massimo: ");
 
 %Saranno usate: 
-%Matrice di Vandermonde
+%Matrice di Wilkinson
 %Matrice di Hilbert
-%Matrice tridiagonale
 
 norms = {ones(1,n-1), ones(1,n-1), ones(1,n-1), ones(1,n-1)};
 norms = {norms, norms};
